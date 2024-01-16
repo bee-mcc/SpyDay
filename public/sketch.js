@@ -7,11 +7,14 @@ let answer = [
   [275, 350],
 ];
 
+function preload() {
+  img = loadImage('pic.png'); // Load the image
+  answerImage = loadImage('answer.png');
+}
+
 function setup() {
   createCanvas(1080, 600);
-  img = loadImage('pic.png'); // Load the image
-
-  answerImage = loadImage('answer.png');
+  noLoop(); //If using noLoop() in setup(), it should be the last line inside the block.
 }
 
 function draw() {
@@ -25,9 +28,9 @@ function draw() {
     let mouseYOnImage = mouseY;
 
     // Display the cursor position on the image
-    fill(255);
-    noStroke();
-    ellipse(mouseXOnImage, mouseYOnImage, 10, 10);
+    // fill(255);
+    // noStroke();
+    // ellipse(mouseXOnImage, mouseYOnImage, 10, 10);
 
     // Display the cursor position below the image
     fill(255);
@@ -63,5 +66,6 @@ function touchEnded() {
   } else {
     gameStarted = true;
     startTime = new Date();
+    redraw();
   }
 }
