@@ -47,7 +47,7 @@ function draw() {
   }
 }
 
-function mouseClicked() {
+function touchEnded() {
   if (gameStarted) {
     const xCorrect = mouseX > answer[0][0] && mouseX < answer[0][1];
     const yCorrect = mouseY > answer[1][0] && mouseY < answer[1][1];
