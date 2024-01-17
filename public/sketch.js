@@ -20,6 +20,7 @@ let answer = [
   [830, 870],
   [72, 102],
 ];
+let isUserWinning = false;
 
 function setup() {
   loadingImage = createImg(
@@ -43,28 +44,34 @@ function draw() {
     loadingImage.remove();
     // noLoop();
     if (gameStarted) {
-      // Displays the image at its actual size at point (0,0)
-      img.resize(1080, 600);
-      image(img, 0, 0);
+      if (isUserWinning) {
+        clear();
+        background('rgb(0,255,0)');
+        text('✨🎉YOU WON!!🎉✨', canvasWidth / 2, canvasHeight / 2);
+      } else {
+        // Displays the image at its actual size at point (0,0)
+        img.resize(1080, 600);
+        image(img, 0, 0);
 
-      // Get the mouse coordinates relative to the image
-      let mouseXOnImage = mouseX;
-      let mouseYOnImage = mouseY;
+        // Get the mouse coordinates relative to the image
+        let mouseXOnImage = mouseX;
+        let mouseYOnImage = mouseY;
 
-      // Display the cursor position on the image
-      textSize(16);
-      fill(255);
-      noStroke();
-      // ellipse(mouseXOnImage, mouseYOnImage, 10, 10);
+        // Display the cursor position on the image
+        textSize(16);
+        fill(255);
+        noStroke();
+        // ellipse(mouseXOnImage, mouseYOnImage, 10, 10);
 
-      // Display the cursor position below the image
-      fill(255);
-      text(
-        `Cursor Position: (${mouseXOnImage}, ${mouseYOnImage})`,
-        10,
-        height - 10
-      );
-      loop();
+        // Display the cursor position below the image
+        fill(255);
+        text(
+          `Cursor Position: (${mouseXOnImage}, ${mouseYOnImage})`,
+          10,
+          height - 10
+        );
+        loop();
+      }
     } else {
       background(220);
 
@@ -106,9 +113,7 @@ function draw() {
 
 function touchEnded() {
   const isLoading = isImageLoading || isAnswerLoading;
-  console.log('touch ended 1');
   if (frame >= 200) {
-    console.log('touch ended');
     if (gameStarted) {
       const xCorrect = mouseX > answer[0][0] && mouseX < answer[0][1];
       const yCorrect = mouseY > answer[1][0] && mouseY < answer[1][1];
@@ -117,7 +122,8 @@ function touchEnded() {
         const endTime = new Date();
         const seconds =
           (endTime.valueOf() - startTime.valueOf()) / 1000;
-        alert(`You found the answer in ${seconds} seconds`);
+
+        isUserWinning = true;
       } else {
         alert("That's not the right answer...");
       }
