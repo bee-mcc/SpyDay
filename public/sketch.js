@@ -1,37 +1,43 @@
+//Graphics
 let img; // Declare variable 'img'.
 let answerImage;
 let loadingImage;
+const canvasWidth = 1080;
+const canvasHeight = 600;
 
+//Game MetaData
 let startTime;
+let frame = 0;
 
+//Game Rules Data
 let isImageLoading = true;
 let isAnswerLoading = true;
-
 let gameStarted = false;
 let answer = [
   [310, 380],
   [275, 350],
 ];
 
-function preload() {
-  loadingImage = createImg('loading.gif');
-}
-
 function setup() {
+  loadingImage = createImg(
+    'loading.gif',
+    'the loading screen for the game spy day'
+  );
+  loadingImage.position(canvasWidth / 2, canvasHeight / 2);
   img = loadImage('pic.png', () => (isImageLoading = false)); // Load the image
   answerImage = loadImage(
     'answer.png',
     () => (isAnswerLoading = false)
   );
-  createCanvas(1080, 600);
+  createCanvas(canvasWidth, canvasHeight);
   noLoop(); //If using noLoop() in setup(), it should be the last line inside the block.
 }
 
 function draw() {
   const isLoading = isImageLoading || isAnswerLoading;
 
-  if (isLoading) {
-    loadingImage.position(0, 0);
+  if (isLoading || frame < 200) {
+    frame = frame + 1;
     loop();
   } else {
     loadingImage.remove();
