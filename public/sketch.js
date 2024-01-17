@@ -5,6 +5,9 @@ let loadingImage;
 const canvasWidth = 1080;
 const canvasHeight = 600;
 
+const smokeypicWidth = 320;
+const smokeypicHeight = 400;
+
 //Game MetaData
 let startTime;
 let frame = 0;
@@ -14,8 +17,8 @@ let isImageLoading = true;
 let isAnswerLoading = true;
 let gameStarted = false;
 let answer = [
-  [310, 380],
-  [275, 350],
+  [830, 870],
+  [72, 102],
 ];
 
 function setup() {
@@ -25,10 +28,7 @@ function setup() {
   );
   loadingImage.position(canvasWidth / 2, canvasHeight / 2);
   img = loadImage('pic.png', () => (isImageLoading = false)); // Load the image
-  answerImage = loadImage(
-    'answer.png',
-    () => (isAnswerLoading = false)
-  );
+  answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
   createCanvas(canvasWidth, canvasHeight);
   noLoop(); //If using noLoop() in setup(), it should be the last line inside the block.
 }
@@ -41,7 +41,7 @@ function draw() {
     loop();
   } else {
     loadingImage.remove();
-    noLoop();
+    // noLoop();
     if (gameStarted) {
       // Displays the image at its actual size at point (0,0)
       img.resize(1080, 600);
@@ -52,8 +52,9 @@ function draw() {
       let mouseYOnImage = mouseY;
 
       // Display the cursor position on the image
-      // fill(255);
-      // noStroke();
+      textSize(16);
+      fill(255);
+      noStroke();
       // ellipse(mouseXOnImage, mouseYOnImage, 10, 10);
 
       // Display the cursor position below the image
@@ -63,14 +64,42 @@ function draw() {
         10,
         height - 10
       );
+      loop();
     } else {
-      image(answerImage, 0, 0);
+      background(220);
+
+      textSize(32);
+      fill(255);
+      stroke(0);
+      strokeWeight(4);
+      text('This is Smokey Robinson', 75, 75);
+
+      answerImage.resize(smokeypicWidth, smokeypicHeight);
+      image(
+        answerImage,
+        canvasWidth / 2 - smokeypicWidth / 2,
+        canvasHeight / 2 - smokeypicHeight / 2
+      );
 
       text(
-        `Find this image hidden somewhere within the image. Click to start your time`,
-        0,
-        150
+        'Find him and click to win!',
+        canvasWidth - 375,
+        canvasHeight - 75
       );
+
+      const pulseSpeed = 0.05;
+      const fontSize = 16 + 4 * sin(frameCount * pulseSpeed);
+
+      textSize(fontSize);
+      fill('black');
+      noStroke();
+
+      text(
+        'click anywhere to start your time',
+        canvasWidth / 2 - 125,
+        canvasHeight - 30
+      );
+      loop();
     }
   }
 }
