@@ -77,8 +77,9 @@ function draw() {
 
 function touchEnded() {
   const isLoading = isImageLoading || isAnswerLoading;
-
-  if (!isLoading) {
+  console.log('touch ended 1');
+  if (frame >= 200) {
+    console.log('touch ended');
     if (gameStarted) {
       const xCorrect = mouseX > answer[0][0] && mouseX < answer[0][1];
       const yCorrect = mouseY > answer[1][0] && mouseY < answer[1][1];
