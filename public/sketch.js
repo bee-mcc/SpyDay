@@ -4,6 +4,8 @@ let answerImage;
 let loadingImage;
 const canvasWidth = 1080;
 const canvasHeight = 600;
+const loadingImageWidth = 355;
+const loadingImageHeight = 261;
 const smokeypicWidth = 320;
 const smokeypicHeight = 400;
 
@@ -20,15 +22,20 @@ let answer = [
   [72, 102],
 ];
 
+function preload() {
+  loadingImage = loadImage('loading.gif');
+}
+
 function setup() {
-  loadingImage = createImg(
-    'loading.gif',
-    'Loading screen for the game spy day'
-  );
+  // loadingImage = createImg(
+  //   'loading.gif',
+  //   'Loading screen for the game spy day'
+  // );
+
   img = loadImage('pic.png', () => (isImageLoading = false));
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
 
-  loadingImage.position(canvasWidth / 2, canvasHeight / 2);
+  loadingImage.delay(100);
   createCanvas(canvasWidth, canvasHeight);
 }
 
@@ -36,9 +43,16 @@ function draw() {
   const isLoading = isImageLoading || isAnswerLoading;
 
   if (isLoading || frameCount < 200) {
+    //Adjusted positioning of the loading image to center it
+    image(
+      loadingImage,
+      canvasWidth / 2 - loadingImageWidth / 2,
+      canvasHeight / 2 - loadingImageHeight / 2
+    );
     frameCount++;
   } else {
-    loadingImage.remove();
+    // loadingImage.remove();
+    clear();
 
     if (gameStarted) {
       if (isUserWinning) {
