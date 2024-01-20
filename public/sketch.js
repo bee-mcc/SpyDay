@@ -22,6 +22,13 @@ let answer = [
   [72, 102],
 ];
 
+/* prevents the mobile browser from processing some default
+ * touch events, like swiping left for "back" or scrolling the page.
+ */
+document.ontouchmove = function (event) {
+  event.preventDefault();
+};
+
 function preload() {
   loadingImage = loadImage('loading.gif');
 }
@@ -35,6 +42,13 @@ function setup() {
 }
 
 function draw() {
+  while (deviceOrientation === 'portrait') {
+    text(
+      'please turn your phone to landscape mode',
+      canvasWidth / 2,
+      canvasHeight / 2
+    );
+  }
   const isLoading = isImageLoading || isAnswerLoading;
 
   if (isLoading || frameCount < 250) {
