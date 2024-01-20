@@ -27,11 +27,6 @@ function preload() {
 }
 
 function setup() {
-  // loadingImage = createImg(
-  //   'loading.gif',
-  //   'Loading screen for the game spy day'
-  // );
-
   img = loadImage('pic.png', () => (isImageLoading = false));
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
 
@@ -42,8 +37,7 @@ function setup() {
 function draw() {
   const isLoading = isImageLoading || isAnswerLoading;
 
-  if (isLoading || frameCount < 200) {
-    //Adjusted positioning of the loading image to center it
+  if (isLoading || frameCount < 250) {
     image(
       loadingImage,
       canvasWidth / 2 - loadingImageWidth / 2,
@@ -51,16 +45,11 @@ function draw() {
     );
     frameCount++;
   } else {
-    // loadingImage.remove();
     clear();
 
     if (gameStarted) {
       if (isUserWinning) {
-        clear();
-        background('rgb(0,255,0)');
-        textSize(32);
-        fill(255);
-        text('✨🎉YOU WON!!🎉✨', canvasWidth / 2, canvasHeight / 2);
+        displayWinScreen();
       } else {
         displayImage();
       }
@@ -124,6 +113,20 @@ function displayStartScreen() {
     canvasWidth / 2 - 125,
     canvasHeight - 30
   );
+}
+
+function displayWinScreen() {
+  clear();
+  background(color(0, 100, 0)); // Darker green background
+  textSize(48);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text('✨🎉YOU WON!!🎉✨', canvasWidth / 2, canvasHeight / 2);
+
+  // ASCII art symbols at the top left and bottom right corners
+  textSize(24);
+  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
+  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', canvasWidth - 80, canvasHeight - 40);
 }
 
 function touchEnded() {
