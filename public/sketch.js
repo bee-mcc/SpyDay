@@ -140,18 +140,6 @@ function displayImage() {
       CONTAIN
     );
   }
-
-  // const mouseXOnImage = mouseX;
-  // const mouseYOnImage = mouseY;
-
-  // textSize(16);
-  // fill(255);
-  // noStroke();
-  // text(
-  //   `Cursor Position: (${mouseXOnImage}, ${mouseYOnImage})`,
-  //   10,
-  //   height - 10
-  // );
 }
 
 function displayStartScreen() {
@@ -199,7 +187,6 @@ function displayWinScreen() {
   textAlign(CENTER, CENTER);
   text('✨🎉YOU WON!!🎉✨', windowWidth / 2, windowHeight / 2);
 
-  // ASCII art symbols at the top left and bottom right corners
   textSize(24);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', windowWidth - 80, windowHeight - 40);
@@ -207,24 +194,24 @@ function displayWinScreen() {
 
 function touchMoved() {
   isScrolling = true;
-  if (previousMouseX < mouseX) {
+  if (previousMouseX < mouseX ?? touches[0].x) {
     const isOffsetXTooSmall = offsetX < 1;
     offsetX = isOffsetXTooSmall ? offsetX : offsetX - 5;
   }
-  if (previousMouseX > mouseX) {
+  if (previousMouseX > mouseX ?? touches[0].x) {
     const isOffsetXTooLarge = offsetX >= canvasWidth - windowWidth;
     offsetX = isOffsetXTooLarge ? offsetX : offsetX + 5;
   }
-  if (previousMouseY < mouseY) {
+  if (previousMouseY < mouseY ?? touches[0].y) {
     const isOffsetYTooSmall = offsetY < 1;
     offsetY = isOffsetYTooSmall ? offsetY : offsetY - 5;
   }
-  if (previousMouseY > mouseY) {
+  if (previousMouseY > mouseY ?? touches[0].y) {
     const isOffsetYTooLarge = offsetY >= canvasHeight - windowHeight;
     offsetY = isOffsetYTooLarge ? offsetY : offsetY + 5;
   }
-  previousMouseX = mouseX;
-  previousMouseY = mouseY;
+  previousMouseX = mouseX ?? touches[0].x;
+  previousMouseY = mouseY ?? touches[0].y;
 }
 
 function touchEnded() {
