@@ -2,8 +2,8 @@
 let img;
 let answerImage;
 let loadingImage;
-const canvasWidth = 1080;
-const canvasHeight = 600;
+const canvasWidth = 1260;
+const canvasHeight = 700;
 const loadingImageWidth = 355;
 const loadingImageHeight = 261;
 const smokeypicWidth = 320;
@@ -12,11 +12,19 @@ const smokeypicHeight = 400;
 // Game MetaData
 let startTime;
 
+//Scrolling Data
+let previousMouseX;
+let previousMouseY;
+let offsetX = 0;
+let offsetY = 0;
+let isScrolling = false;
+
 // Game Rules Data
 let isImageLoading = true;
 let isAnswerLoading = true;
 let gameStarted = false;
 let isUserWinning = false;
+//needs to be pixels within the photo, not pixels on canvas
 let answer = [
   [830, 870],
   [72, 102],
@@ -29,6 +37,12 @@ document.ontouchmove = function (event) {
   event.preventDefault();
 };
 
+function windowResized() {
+  offsetX = 0;
+  offsetY = 0;
+  resizeCanvas(windowWidth, windowHeight);
+}
+
 function preload() {
   loadingImage = loadImage('loading.gif');
 }
@@ -38,24 +52,17 @@ function setup() {
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
 
   loadingImage.delay(100);
-  createCanvas(canvasWidth, canvasHeight);
+  createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  while (deviceOrientation === 'portrait') {
-    text(
-      'please turn your phone to landscape mode',
-      canvasWidth / 2,
-      canvasHeight / 2
-    );
-  }
   const isLoading = isImageLoading || isAnswerLoading;
 
   if (isLoading || frameCount < 250) {
     image(
       loadingImage,
-      canvasWidth / 2 - loadingImageWidth / 2,
-      canvasHeight / 2 - loadingImageHeight / 2
+      windowWidth / 2 - loadingImageWidth / 2,
+      windowHeight / 2 - loadingImageHeight / 2
     );
     frameCount++;
   } else {
@@ -77,19 +84,74 @@ function displayImage() {
   clear();
   background(220);
   img.resize(canvasWidth, canvasHeight);
-  image(img, 0, 0);
+  //TODO: should also deal with the case of the just the width being too small or just the height being too small
+  if (windowWidth > canvasWidth && windowHeight > canvasHeight) {
+    image(
+      img,
+      windowWidth / 2 - canvasWidth / 2,
+      windowHeight / 2 - canvasHeight / 2
+    );
+  } else if (
+    windowWidth > canvasWidth &&
+    windowHeight <= canvasHeight
+  ) {
+    image(
+      img,
+      windowWidth / 2 - canvasWidth / 2,
+      0,
+      canvasWidth,
+      windowHeight,
+      0,
+      0 + offsetY,
+      canvasWidth,
+      windowHeight,
+      CONTAIN
+    );
+  } else if (
+    windowWidth <= canvasWidth &&
+    windowHeight > canvasHeight
+  ) {
+    image(
+      img,
+      0,
+      windowHeight / 2 - canvasHeight / 2,
+      windowWidth,
+      canvasHeight,
+      0 + offsetX,
+      0,
+      windowWidth,
+      canvasHeight,
+      CONTAIN
+    );
+  } else {
+    //TODO need to do something like this so I can prevent it from scrolling too far
+    // const isXOffsetTooLarge = offsetX >= canvasWidth - offsetX;
+    // const isYOffsetTooLarge = offsetY >= canvasHeigth - offsetY;
+    image(
+      img,
+      0,
+      0,
+      windowWidth,
+      windowHeight,
+      0 + offsetX,
+      0 + offsetY,
+      windowWidth,
+      windowHeight,
+      CONTAIN
+    );
+  }
 
-  const mouseXOnImage = mouseX;
-  const mouseYOnImage = mouseY;
+  // const mouseXOnImage = mouseX;
+  // const mouseYOnImage = mouseY;
 
-  textSize(16);
-  fill(255);
-  noStroke();
-  text(
-    `Cursor Position: (${mouseXOnImage}, ${mouseYOnImage})`,
-    10,
-    height - 10
-  );
+  // textSize(16);
+  // fill(255);
+  // noStroke();
+  // text(
+  //   `Cursor Position: (${mouseXOnImage}, ${mouseYOnImage})`,
+  //   10,
+  //   height - 10
+  // );
 }
 
 function displayStartScreen() {
@@ -100,19 +162,19 @@ function displayStartScreen() {
   fill(255);
   stroke(0);
   strokeWeight(4);
-  text('This is Smokey Robinson', 75, 75);
+  text('This is Smokey Robinson', windowWidth < 450 ? 5 : 75, 75);
 
   answerImage.resize(smokeypicWidth, smokeypicHeight);
   image(
     answerImage,
-    canvasWidth / 2 - smokeypicWidth / 2,
-    canvasHeight / 2 - smokeypicHeight / 2
+    windowWidth / 2 - smokeypicWidth / 2,
+    windowHeight / 2 - smokeypicHeight / 2
   );
 
   text(
     'Find him and click to win!',
-    canvasWidth - 375,
-    canvasHeight - 75
+    windowWidth - 375,
+    windowHeight - 75
   );
 
   const pulseSpeed = 0.05;
@@ -124,8 +186,8 @@ function displayStartScreen() {
 
   text(
     'Click anywhere to start your time',
-    canvasWidth / 2 - 125,
-    canvasHeight - 30
+    windowWidth / 2 - 125,
+    windowHeight - 30
   );
 }
 
@@ -135,15 +197,41 @@ function displayWinScreen() {
   textSize(48);
   fill(255);
   textAlign(CENTER, CENTER);
-  text('✨🎉YOU WON!!🎉✨', canvasWidth / 2, canvasHeight / 2);
+  text('✨🎉YOU WON!!🎉✨', windowWidth / 2, windowHeight / 2);
 
   // ASCII art symbols at the top left and bottom right corners
   textSize(24);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
-  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', canvasWidth - 80, canvasHeight - 40);
+  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', windowWidth - 80, windowHeight - 40);
+}
+
+function touchMoved() {
+  isScrolling = true;
+  if (previousMouseX < mouseX) {
+    const isOffsetXTooSmall = offsetX < 1;
+    offsetX = isOffsetXTooSmall ? offsetX : offsetX - 5;
+  }
+  if (previousMouseX > mouseX) {
+    const isOffsetXTooLarge = offsetX >= canvasWidth - windowWidth;
+    offsetX = isOffsetXTooLarge ? offsetX : offsetX + 5;
+  }
+  if (previousMouseY < mouseY) {
+    const isOffsetYTooSmall = offsetY < 1;
+    offsetY = isOffsetYTooSmall ? offsetY : offsetY - 5;
+  }
+  if (previousMouseY > mouseY) {
+    const isOffsetYTooLarge = offsetY >= canvasHeight - windowHeight;
+    offsetY = isOffsetYTooLarge ? offsetY : offsetY + 5;
+  }
+  previousMouseX = mouseX;
+  previousMouseY = mouseY;
 }
 
 function touchEnded() {
+  if (isScrolling) {
+    isScrolling = false;
+    return;
+  }
   const isLoading = isImageLoading || isAnswerLoading;
   if (frameCount >= 200) {
     if (gameStarted) {
