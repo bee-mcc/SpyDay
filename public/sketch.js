@@ -220,7 +220,7 @@ function touchEnded() {
     return;
   }
   const isLoading = isImageLoading || isAnswerLoading;
-  if (frameCount >= 200) {
+  if (frameCount >= 200 && !isLoading) {
     if (gameStarted) {
       checkAnswer();
     } else {
