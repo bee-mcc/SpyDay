@@ -40,7 +40,7 @@ document.ontouchmove = function (event) {
 function windowResized() {
   offsetX = 0;
   offsetY = 0;
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
 function preload() {
@@ -52,7 +52,7 @@ function setup() {
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
 
   loadingImage.delay(100);
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(window.innerWidth, window.innerHeight);
 }
 
 function draw() {
@@ -61,8 +61,8 @@ function draw() {
   if (isLoading || frameCount < 250) {
     image(
       loadingImage,
-      windowWidth / 2 - loadingImageWidth / 2,
-      windowHeight / 2 - loadingImageHeight / 2
+      window.innerWidth / 2 - loadingImageWidth / 2,
+      window.innerHeight / 2 - loadingImageHeight / 2
     );
     frameCount++;
   } else {
@@ -85,41 +85,44 @@ function displayImage() {
   background(220);
   img.resize(canvasWidth, canvasHeight);
   //TODO: should also deal with the case of the just the width being too small or just the height being too small
-  if (windowWidth > canvasWidth && windowHeight > canvasHeight) {
-    image(
-      img,
-      windowWidth / 2 - canvasWidth / 2,
-      windowHeight / 2 - canvasHeight / 2
-    );
-  } else if (
-    windowWidth > canvasWidth &&
-    windowHeight <= canvasHeight
+  if (
+    window.innerWidth > canvasWidth &&
+    window.innerHeight > canvasHeight
   ) {
     image(
       img,
-      windowWidth / 2 - canvasWidth / 2,
+      window.innerWidth / 2 - canvasWidth / 2,
+      window.innerHeight / 2 - canvasHeight / 2
+    );
+  } else if (
+    window.innerWidth > canvasWidth &&
+    window.innerHeight <= canvasHeight
+  ) {
+    image(
+      img,
+      window.innerWidth / 2 - canvasWidth / 2,
       0,
       canvasWidth,
-      windowHeight,
+      window.innerHeight,
       0,
       0 + offsetY,
       canvasWidth,
-      windowHeight,
+      window.innerHeight,
       CONTAIN
     );
   } else if (
-    windowWidth <= canvasWidth &&
-    windowHeight > canvasHeight
+    window.innerWidth <= canvasWidth &&
+    window.innerHeight > canvasHeight
   ) {
     image(
       img,
       0,
-      windowHeight / 2 - canvasHeight / 2,
-      windowWidth,
+      window.innerHeight / 2 - canvasHeight / 2,
+      window.innerWidth,
       canvasHeight,
       0 + offsetX,
       0,
-      windowWidth,
+      window.innerWidth,
       canvasHeight,
       CONTAIN
     );
@@ -131,12 +134,12 @@ function displayImage() {
       img,
       0,
       0,
-      windowWidth,
-      windowHeight,
+      window.innerWidth,
+      window.innerHeight,
       0 + offsetX,
       0 + offsetY,
-      windowWidth,
-      windowHeight,
+      window.innerWidth,
+      window.innerHeight,
       CONTAIN
     );
   }
@@ -150,19 +153,23 @@ function displayStartScreen() {
   fill(255);
   stroke(0);
   strokeWeight(4);
-  text('This is Smokey Robinson', windowWidth < 450 ? 5 : 75, 75);
+  text(
+    'This is Smokey Robinson',
+    window.innerWidth < 450 ? 5 : 75,
+    75
+  );
 
   answerImage.resize(smokeypicWidth, smokeypicHeight);
   image(
     answerImage,
-    windowWidth / 2 - smokeypicWidth / 2,
-    windowHeight / 2 - smokeypicHeight / 2
+    window.innerWidth / 2 - smokeypicWidth / 2,
+    window.innerHeight / 2 - smokeypicHeight / 2
   );
 
   text(
     'Find him and click to win!',
-    windowWidth - 375,
-    windowHeight - 75
+    window.innerWidth - 375,
+    window.innerHeight - 75
   );
 
   const pulseSpeed = 0.05;
@@ -174,8 +181,8 @@ function displayStartScreen() {
 
   text(
     'Click anywhere to start your time',
-    windowWidth / 2 - 125,
-    windowHeight - 30
+    window.innerWidth / 2 - 125,
+    window.innerHeight - 30
   );
 }
 
@@ -185,11 +192,19 @@ function displayWinScreen() {
   textSize(48);
   fill(255);
   textAlign(CENTER, CENTER);
-  text('✨🎉YOU WON!!🎉✨', windowWidth / 2, windowHeight / 2);
+  text(
+    '✨🎉YOU WON!!🎉✨',
+    window.innerWidth / 2,
+    window.innerHeight / 2
+  );
 
   textSize(24);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
-  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', windowWidth - 80, windowHeight - 40);
+  text(
+    '╰(⸝⸝⸝´꒳`⸝⸝⸝)╯',
+    window.innerWidth - 80,
+    window.innerHeight - 40
+  );
 }
 
 function touchMoved() {
@@ -199,7 +214,8 @@ function touchMoved() {
     offsetX = isOffsetXTooSmall ? offsetX : offsetX - 5;
   }
   if (previousMouseX > mouseX ?? touches[0].x) {
-    const isOffsetXTooLarge = offsetX >= canvasWidth - windowWidth;
+    const isOffsetXTooLarge =
+      offsetX >= canvasWidth - window.innerWidth;
     offsetX = isOffsetXTooLarge ? offsetX : offsetX + 5;
   }
   if (previousMouseY < mouseY ?? touches[0].y) {
@@ -207,7 +223,8 @@ function touchMoved() {
     offsetY = isOffsetYTooSmall ? offsetY : offsetY - 5;
   }
   if (previousMouseY > mouseY ?? touches[0].y) {
-    const isOffsetYTooLarge = offsetY >= canvasHeight - windowHeight;
+    const isOffsetYTooLarge =
+      offsetY >= canvasHeight - window.innerHeight;
     offsetY = isOffsetYTooLarge ? offsetY : offsetY + 5;
   }
   previousMouseX = mouseX ?? touches[0].x;
