@@ -1,7 +1,10 @@
+//AMELIA HAD ORIGINAL IDEA FOR I-SPY GAME W JO AND REX'S SHELF
+
 // Graphics
 let img;
 let answerImage;
 let loadingImage;
+//TODO rename as image width and heigh (make sure this doesn't break anything)
 const canvasWidth = 1260;
 const canvasHeight = 700;
 const loadingImageWidth = 355;
@@ -26,9 +29,11 @@ let gameStarted = false;
 let isUserWinning = false;
 //needs to be pixels within the photo, not pixels on canvas
 let answer = [
-  [830, 870],
-  [72, 102],
+  [964, 1030],
+  [70, 123],
 ];
+let mouseXWithinImage;
+let mouseYWithinImage;
 
 /* prevents the mobile browser from processing some default
  * touch events, like swiping left for "back" or scrolling the page.
@@ -84,16 +89,18 @@ function displayImage() {
   clear();
   background(220);
   img.resize(canvasWidth, canvasHeight);
-  //TODO: should also deal with the case of the just the width being too small or just the height being too small
+
   if (
     window.innerWidth > canvasWidth &&
     window.innerHeight > canvasHeight
   ) {
-    image(
+    const retVal = image(
       img,
       window.innerWidth / 2 - canvasWidth / 2,
       window.innerHeight / 2 - canvasHeight / 2
     );
+
+    setMouseLocationWithinImage();
   } else if (
     window.innerWidth > canvasWidth &&
     window.innerHeight <= canvasHeight
@@ -143,6 +150,30 @@ function displayImage() {
       CONTAIN
     );
   }
+}
+
+//TODO this solution works for the base case of a window larger than our answer image - now it needs to work for the remaining 3 cases
+// x scrolling enabled
+// y scrolling enabled
+// x and y scrolling enabled
+// also add the text displaying where the mouse is within the image as a "debug mode"
+// btw... will this work for mobile? we don't keep a persistant store of the "mouse location" since it's all touches...
+function setMouseLocationWithinImage(
+  isXScrollingEnabled,
+  isYScollingEnabled
+) {
+  const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
+  const topBorder = window.innerHeight / 2 - canvasHeight / 2;
+
+  if (mouseX > leftBorder) {
+    console.log('zero at left border:', mouseX - leftBorder);
+    mouseXWithinImage = mouseX - leftBorder;
+  }
+  if (mouseY > topBorder) {
+    console.log('zero at top border:', mouseY - topBorder);
+    mouseYWithinImage = mouseY - topBorder;
+  }
+  text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
 
 function displayStartScreen() {
@@ -247,8 +278,12 @@ function touchEnded() {
 }
 
 function checkAnswer() {
-  const xCorrect = mouseX > answer[0][0] && mouseX < answer[0][1];
-  const yCorrect = mouseY > answer[1][0] && mouseY < answer[1][1];
+  const xCorrect =
+    mouseXWithinImage > answer[0][0] &&
+    mouseXWithinImage < answer[0][1];
+  const yCorrect =
+    mouseYWithinImage > answer[1][0] &&
+    mouseYWithinImage < answer[1][1];
   const isCorrect = xCorrect && yCorrect;
 
   if (isCorrect) {
