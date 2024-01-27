@@ -21,6 +21,8 @@ let previousMouseY;
 let offsetX = 0;
 let offsetY = 0;
 let isScrolling = false;
+let xScrollingIsEnabled = false;
+let yScrollingIsEnabled = false;
 
 // Game Rules Data
 let isImageLoading = true;
@@ -90,21 +92,18 @@ function displayImage() {
   background(220);
   img.resize(canvasWidth, canvasHeight);
 
-  if (
-    window.innerWidth > canvasWidth &&
-    window.innerHeight > canvasHeight
-  ) {
+  xScrollingIsEnabled = window.innerWidth < canvasWidth;
+  yScrollingIsEnabled = window.innerHeight < canvasHeight;
+
+  if (!xScrollingIsEnabled && !yScrollingIsEnabled) {
     const retVal = image(
       img,
       window.innerWidth / 2 - canvasWidth / 2,
       window.innerHeight / 2 - canvasHeight / 2
     );
 
-    setMouseLocationWithinImage();
-  } else if (
-    window.innerWidth > canvasWidth &&
-    window.innerHeight <= canvasHeight
-  ) {
+    setMouseLocationWithinImage(false, false);
+  } else if (!xScrollingIsEnabled && yScrollingIsEnabled) {
     image(
       img,
       window.innerWidth / 2 - canvasWidth / 2,
@@ -117,10 +116,8 @@ function displayImage() {
       window.innerHeight,
       CONTAIN
     );
-  } else if (
-    window.innerWidth <= canvasWidth &&
-    window.innerHeight > canvasHeight
-  ) {
+    setMouseLocationWithinImage(false, true);
+  } else if (xScrollingIsEnabled && !yScrollingIsEnabled) {
     image(
       img,
       0,
@@ -133,6 +130,7 @@ function displayImage() {
       canvasHeight,
       CONTAIN
     );
+    setMouseLocationWithinImage(true, false);
   } else {
     //TODO need to do something like this so I can prevent it from scrolling too far
     // const isXOffsetTooLarge = offsetX >= canvasWidth - offsetX;
@@ -149,6 +147,7 @@ function displayImage() {
       window.innerHeight,
       CONTAIN
     );
+    setMouseLocationWithinImage(true, true);
   }
 }
 
@@ -162,15 +161,33 @@ function setMouseLocationWithinImage(
   isXScrollingEnabled,
   isYScollingEnabled
 ) {
-  const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
-  const topBorder = window.innerHeight / 2 - canvasHeight / 2;
+  if (!isXScrollingEnabled && !isYScollingEnabled) {
+    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
+    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
 
-  if (mouseX > leftBorder) {
-    mouseXWithinImage = mouseX - leftBorder;
+    if (mouseX > leftBorder) {
+      mouseXWithinImage = mouseX - leftBorder;
+    }
+    if (mouseY > topBorder) {
+      mouseYWithinImage = mouseY - topBorder;
+    }
+  } else if (isXScrollingEnabled && !isYScollingEnabled) {
+    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
+    mouseXWithinImage = mouseX + offsetX;
+    if (mouseY > topBorder) {
+      mouseYWithinImage = mouseY - topBorder;
+    }
+  } else if (isYScollingEnabled && !isXScrollingEnabled) {
+    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
+    mouseYWithinImage = mouseY + offsetY;
+    if (mouseX > leftBorder) {
+      mouseXWithinImage = mouseX - topBorder;
+    }
+  } else {
+    mouseXWithinImage = mouseX + offsetX;
+    mouseYWithinImage = mouseY + offsetY;
   }
-  if (mouseY > topBorder) {
-    mouseYWithinImage = mouseY - topBorder;
-  }
+
   text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
 
@@ -236,6 +253,13 @@ function displayWinScreen() {
   );
 }
 
+function touchStarted() {
+  setMouseLocationWithinImage(
+    xScrollingIsEnabled,
+    yScrollingIsEnabled
+  );
+}
+
 function touchMoved() {
   isScrolling = true;
   if (previousMouseX < mouseX ?? touches[0].x) {
@@ -276,21 +300,12 @@ function touchEnded() {
 }
 
 function checkAnswer() {
-  alert(Boolean(touches[0]));
-  const touchXWithinImage = Boolean(touches[0])
-    ? touches[0].x + offsetX
-    : undefined;
-  const touchYWithinImage = Boolean(touches[0])
-    ? touches[0].y + offsetY
-    : undefined;
-
-  const playerInputX = mouseXWithinImage ?? touchXWithinImage;
-  const playerInputY = mouseYWithinImage ?? touchYWithinImage;
-
   const xCorrect =
-    playerInputX > answer[0][0] && playerInputX < answer[0][1];
+    mouseXWithinImage > answer[0][0] &&
+    mouseXWithinImage < answer[0][1];
   const yCorrect =
-    playerInputY > answer[1][0] && playerInputY < answer[1][1];
+    mouseYWithinImage > answer[1][0] &&
+    mouseYWithinImage < answer[1][1];
   const isCorrect = xCorrect && yCorrect;
 
   if (isCorrect) {
