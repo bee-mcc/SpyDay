@@ -284,6 +284,10 @@ function checkAnswer() {
   const playerInputX = mouseXWithinImage ?? touchXWithinImage;
   const playerInputY = mouseYWithinImage ?? touchYWithinImage;
 
+  alert(
+    `${touchXWithinImage},${touchYWithinImage},${playerInputX},${playerInputY},`
+  );
+
   const xCorrect =
     playerInputX > answer[0][0] && playerInputX < answer[0][1];
   const yCorrect =
