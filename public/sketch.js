@@ -166,11 +166,9 @@ function setMouseLocationWithinImage(
   const topBorder = window.innerHeight / 2 - canvasHeight / 2;
 
   if (mouseX > leftBorder) {
-    console.log('zero at left border:', mouseX - leftBorder);
     mouseXWithinImage = mouseX ? mouseX - leftBorder : undefined;
   }
   if (mouseY > topBorder) {
-    console.log('zero at top border:', mouseY - topBorder);
     mouseYWithinImage = mouseY ? mouseY - topBorder : undefined;
   }
   text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
