@@ -166,10 +166,10 @@ function setMouseLocationWithinImage(
   const topBorder = window.innerHeight / 2 - canvasHeight / 2;
 
   if (mouseX > leftBorder) {
-    mouseXWithinImage = mouseX ? mouseX - leftBorder : undefined;
+    mouseXWithinImage = mouseX - leftBorder;
   }
   if (mouseY > topBorder) {
-    mouseYWithinImage = mouseY ? mouseY - topBorder : undefined;
+    mouseYWithinImage = mouseY - topBorder;
   }
   text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
@@ -276,15 +276,16 @@ function touchEnded() {
 }
 
 function checkAnswer() {
-  const touchXWithinImage = touches[0].x + offsetX;
-  const touchYWithinImage = touches[0].y + offsetY;
+  alert(Boolean(touches[0]));
+  const touchXWithinImage = Boolean(touches[0])
+    ? touches[0].x + offsetX
+    : undefined;
+  const touchYWithinImage = Boolean(touches[0])
+    ? touches[0].y + offsetY
+    : undefined;
 
   const playerInputX = mouseXWithinImage ?? touchXWithinImage;
   const playerInputY = mouseYWithinImage ?? touchYWithinImage;
-
-  alert(
-    `${touchXWithinImage},${touchYWithinImage},${playerInputX},${playerInputY},`
-  );
 
   const xCorrect =
     playerInputX > answer[0][0] && playerInputX < answer[0][1];
