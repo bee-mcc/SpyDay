@@ -167,11 +167,11 @@ function setMouseLocationWithinImage(
 
   if (mouseX > leftBorder) {
     console.log('zero at left border:', mouseX - leftBorder);
-    mouseXWithinImage = mouseX - leftBorder;
+    mouseXWithinImage = mouseX ? mouseX - leftBorder : undefined;
   }
   if (mouseY > topBorder) {
     console.log('zero at top border:', mouseY - topBorder);
-    mouseYWithinImage = mouseY - topBorder;
+    mouseYWithinImage = mouseY ? mouseY - topBorder : undefined;
   }
   text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
@@ -278,12 +278,16 @@ function touchEnded() {
 }
 
 function checkAnswer() {
+  const touchXWithinImage = touches[0].x + offsetX;
+  const touchYWithinImage = touches[0].y + offsetY;
+
+  const playerInputX = mouseXWithinImage ?? touchXWithinImage;
+  const playerInputY = mouseYWithinImage ?? touchYWithinImage;
+
   const xCorrect =
-    mouseXWithinImage > answer[0][0] &&
-    mouseXWithinImage < answer[0][1];
+    playerInputX > answer[0][0] && playerInputX < answer[0][1];
   const yCorrect =
-    mouseYWithinImage > answer[1][0] &&
-    mouseYWithinImage < answer[1][1];
+    playerInputY > answer[1][0] && playerInputY < answer[1][1];
   const isCorrect = xCorrect && yCorrect;
 
   if (isCorrect) {
