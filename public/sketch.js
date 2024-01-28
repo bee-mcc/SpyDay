@@ -79,7 +79,7 @@ function draw() {
     frameCount++;
     textSize(32);
     text(
-      'Is loading...',
+      'is loading...',
       window.innerWidth / 2 - 60,
       window.innerHeight / 2 + 190
     );
@@ -246,16 +246,16 @@ function displayStartScreen() {
 function displayWinScreen() {
   clear();
   background(color(0, 100, 0)); // Darker green background
-  textSize(48);
   fill(255);
-  textAlign(CENTER, CENTER);
-  text(
-    '✨🎉YOU WON!!🎉✨',
-    window.innerWidth / 2,
-    window.innerHeight / 2
-  );
 
   if (xScrollingIsEnabled) {
+    textSize(30);
+    textAlign(CENTER, CENTER);
+    text(
+      '✨🎉YOU WON!!🎉✨',
+      window.innerWidth / 2,
+      window.innerHeight / 2
+    );
     textSize(14);
     text(
       `🕠It took you ${seconds} seconds to find Smokey!`,
@@ -268,6 +268,13 @@ function displayWinScreen() {
       window.innerHeight / 2 + 64
     );
   } else {
+    textSize(48);
+    textAlign(CENTER, CENTER);
+    text(
+      '✨🎉YOU WON!!🎉✨',
+      window.innerWidth / 2,
+      window.innerHeight / 2
+    );
     textSize(32);
     text(
       `🕠It took you ${seconds} seconds to find Smokey! Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
