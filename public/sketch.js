@@ -286,21 +286,21 @@ function touchMoved() {
   isScrolling = true;
   if (previousMouseX < mouseX ?? touches[0].x) {
     const isOffsetXTooSmall = offsetX < 1;
-    offsetX = isOffsetXTooSmall ? offsetX : offsetX - 5;
+    offsetX = isOffsetXTooSmall ? offsetX : offsetX - 10;
   }
   if (previousMouseX > mouseX ?? touches[0].x) {
     const isOffsetXTooLarge =
       offsetX >= canvasWidth - window.innerWidth;
-    offsetX = isOffsetXTooLarge ? offsetX : offsetX + 5;
+    offsetX = isOffsetXTooLarge ? offsetX : offsetX + 10;
   }
   if (previousMouseY < mouseY ?? touches[0].y) {
     const isOffsetYTooSmall = offsetY < 1;
-    offsetY = isOffsetYTooSmall ? offsetY : offsetY - 5;
+    offsetY = isOffsetYTooSmall ? offsetY : offsetY - 10;
   }
   if (previousMouseY > mouseY ?? touches[0].y) {
     const isOffsetYTooLarge =
       offsetY >= canvasHeight - window.innerHeight;
-    offsetY = isOffsetYTooLarge ? offsetY : offsetY + 5;
+    offsetY = isOffsetYTooLarge ? offsetY : offsetY + 10;
   }
   previousMouseX = mouseX ?? touches[0].x;
   previousMouseY = mouseY ?? touches[0].y;
@@ -334,7 +334,7 @@ function checkAnswer() {
     const endTime = new Date();
     seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
     isUserWinning = true;
-  } else {
+  } else if (!isUserWinning) {
     alert("That's not the right answer...");
   }
 }
