@@ -77,11 +77,11 @@ function draw() {
       window.innerHeight / 2 - loadingImageHeight / 2
     );
     frameCount++;
-    textSize(14);
+    textSize(32);
     text(
       'Is loading...',
-      window.innerWidth / 2 - loadingImageWidth / 2,
-      window.innerHeight / 2 - loadingImageHeight / 2 + 45
+      window.innerWidth / 2,
+      window.innerHeight / 2 + 45
     );
   } else {
     clear();
