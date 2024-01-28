@@ -1,5 +1,9 @@
 //AMELIA HAD ORIGINAL IDEA FOR I-SPY GAME W JO AND REX'S SHELF
 
+//TODO: do something like this to collect the user's name (3 letters only) and
+// pop their name up in the back liek that + show them where they stand on the leaderboard
+// https://p5js.org/examples/dom-input-and-button.html
+
 // Graphics
 let img;
 let answerImage;
@@ -73,6 +77,12 @@ function draw() {
       window.innerHeight / 2 - loadingImageHeight / 2
     );
     frameCount++;
+    textSize(14);
+    text(
+      'Is loading...',
+      window.innerWidth / 2 - loadingImageWidth / 2,
+      window.innerHeight / 2 - loadingImageHeight / 2 + 45
+    );
   } else {
     clear();
 
