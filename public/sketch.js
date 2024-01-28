@@ -14,6 +14,7 @@ const smokeypicHeight = 400;
 
 // Game MetaData
 let startTime;
+let seconds;
 
 //Scrolling Data
 let previousMouseX;
@@ -244,6 +245,27 @@ function displayWinScreen() {
     window.innerHeight / 2
   );
 
+  if (xScrollingIsEnabled) {
+    textSize(14);
+    text(
+      `🕠It took you ${seconds} seconds to find Smokey!`,
+      window.innerWidth / 2,
+      window.innerHeight / 2 + 48
+    );
+    text(
+      `Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
+      window.innerWidth / 2,
+      window.innerHeight / 2 + 64
+    );
+  } else {
+    textSize(32);
+    text(
+      `🕠It took you ${seconds} seconds to find Smokey! Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
+      window.innerWidth / 2,
+      window.innerHeight / 2 + 48
+    );
+  }
+
   textSize(24);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
   text(
@@ -310,7 +332,7 @@ function checkAnswer() {
 
   if (isCorrect) {
     const endTime = new Date();
-    const seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
+    seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
     isUserWinning = true;
   } else {
     alert("That's not the right answer...");
