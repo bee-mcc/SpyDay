@@ -80,8 +80,8 @@ function draw() {
     textSize(32);
     text(
       'Is loading...',
-      window.innerWidth / 2 - 25,
-      window.innerHeight / 2 + 120
+      window.innerWidth / 2 - 40,
+      window.innerHeight / 2 + 150
     );
   } else {
     clear();
