@@ -69,6 +69,7 @@ app.post('/leaderboard', (req, res) => {
   const isLocal = false;
   let data = isLocal ? mockData : readDataFromS3();
   const { time, playerName } = req.body;
+  console.log(data);
 
   data.push({ time, playerName });
   data.sort((a, b) => a.time - b.time);
