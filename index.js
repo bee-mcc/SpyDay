@@ -10,7 +10,11 @@ const port = 3000;
 
 //aws settings
 const S3_BUCKET_NAME = process.env.S3_BUCKET;
-aws.config.region = 'us-east-2';
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-2',
+});
 const s3 = new aws.S3();
 
 //helper functions s3
