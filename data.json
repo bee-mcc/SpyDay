@@ -1,0 +1,6 @@
+[
+  { "time": 10, "playerName": "ABC" },
+  { "time": 25, "playerName": "XYZ" },
+  { "time": 15, "playerName": "DEF" },
+  { "time": 5, "playerName": "GHI" }
+]

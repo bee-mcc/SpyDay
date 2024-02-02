@@ -350,6 +350,7 @@ function checkAnswer() {
   if (isCorrect) {
     const endTime = new Date();
     seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
+    insertData(seconds, 'BRI');
     isUserWinning = true;
   } else if (!isUserWinning) {
     alert("That's not the right answer...");
@@ -359,4 +360,25 @@ function checkAnswer() {
 function startGame() {
   gameStarted = true;
   startTime = new Date();
+}
+
+function insertData(time, playerName) {
+  const url = 'http://localhost:3000/leaderboard'; // Replace with your server URL
+
+  const data = { time, playerName };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log('Inserted data:', result);
+    })
+    .catch((error) => {
+      console.error('Error inserting data:', error);
+    });
 }
