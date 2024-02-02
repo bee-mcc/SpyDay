@@ -363,7 +363,8 @@ function startGame() {
 }
 
 function insertData(time, playerName) {
-  const url = 'http://localhost:3000/leaderboard'; // Replace with your server URL
+  const url =
+    'https://spy-day-da28768a781b.herokuapp.com/leaderboard'; // Replace with your server URL
 
   const data = { time, playerName };
 
