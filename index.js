@@ -102,8 +102,8 @@ let mockData = [
 
 //TODO:  When deploying, you should change the ‘AllowedOrigin’ to only accept requests from your domain.
 app.post('/leaderboard', async (req, res) => {
-  const didObjectExist = await didObjectExist();
-  console.info('s3 object existed?', didObjectExist);
+  const didObjectExistResult = await didObjectExist();
+  console.info('s3 object existed?', didObjectExistResult);
   const isLocal = false;
   let data = isLocal ? mockData : await readDataFromS3();
 
