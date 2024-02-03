@@ -109,7 +109,7 @@ let mockData = [
 app.post('/leaderboard', async (req, res) => {
   const didObjectExistResult = await didObjectExist();
   console.info('s3 object existed?', didObjectExistResult);
-  const isLocal = true;
+  const isLocal = false;
   let data = isLocal ? mockData : await readDataFromS3();
 
   const { time, playerName } = req.body;

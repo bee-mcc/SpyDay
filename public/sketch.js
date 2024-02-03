@@ -108,7 +108,7 @@ function displayLeaderBoard() {
   background(color(0, 100, 0)); // Darker green background
   fill(255);
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 11; i++) {
     const score = leaderboardData[i];
     text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
     text(
