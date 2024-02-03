@@ -4,6 +4,12 @@ const express = require('express');
 const path = require('path');
 const aws = require('aws-sdk');
 const { write } = require('fs');
+const {
+  RegExpMatcher,
+  TextCensor,
+  englishDataset,
+  englishRecommendedTransformers,
+} = require('obscenity');
 
 const app = express();
 const port = 3000;
@@ -103,16 +109,30 @@ let mockData = [
 app.post('/leaderboard', async (req, res) => {
   const didObjectExistResult = await didObjectExist();
   console.info('s3 object existed?', didObjectExistResult);
-  const isLocal = false;
+  const isLocal = true;
   let data = isLocal ? mockData : await readDataFromS3();
 
   const { time, playerName } = req.body;
   console.log(data);
 
-  data.push({ time, playerName });
+  const matcher = new RegExpMatcher({
+    ...englishDataset.build(),
+    ...englishRecommendedTransformers,
+  });
+
+  const nameIsProfane = matcher.hasMatch(playerName);
+
+  if (nameIsProfane) {
+    data.push({ time, playerName: '***' });
+  } else {
+    data.push({ time, playerName });
+  }
+
   data.sort((a, b) => a.time - b.time);
 
-  writeDataToS3(data);
+  if (!isLocal) {
+    writeDataToS3(data);
+  }
 
   res.json(data);
 });

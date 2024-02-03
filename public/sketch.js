@@ -19,6 +19,7 @@ const smokeypicHeight = 400;
 // Game MetaData
 let startTime;
 let seconds;
+let leaderboardData;
 
 //Scrolling Data
 let previousMouseX;
@@ -34,6 +35,7 @@ let isImageLoading = true;
 let isAnswerLoading = true;
 let gameStarted = false;
 let isUserWinning = false;
+let isShowingLeaderBoard = false;
 //needs to be pixels within the photo, not pixels on canvas
 let answer = [
   [964, 1030],
@@ -87,14 +89,33 @@ function draw() {
     clear();
 
     if (gameStarted) {
-      if (isUserWinning) {
+      if (isUserWinning && !isShowingLeaderBoard) {
         displayWinScreen();
-      } else {
+      } else if (!isShowingLeaderBoard) {
         displayImage();
+      } else if (isShowingLeaderBoard) {
+        displayLeaderBoard();
       }
     } else {
       displayStartScreen();
     }
+  }
+}
+
+function displayLeaderBoard() {
+  //start loop again after win screen
+  clear();
+  background(color(0, 100, 0)); // Darker green background
+  fill(255);
+
+  for (let i = 0; i < 5; i++) {
+    const score = leaderboardData[i];
+    text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
+    text(
+      `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
+      window.innerWidth / 2,
+      75 * (i + 1)
+    );
   }
 }
 
@@ -199,7 +220,7 @@ function setMouseLocationWithinImage(
     mouseYWithinImage = mouseY + offsetY;
   }
 
-  text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
+  //text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
 
 function displayStartScreen() {
@@ -248,39 +269,64 @@ function displayWinScreen() {
   background(color(0, 100, 0)); // Darker green background
   fill(255);
 
+  noLoop();
+
+  const myInput = createInput();
+  const myButton = createButton(
+    'Input name (3 letters) and click to see leaderboard'
+  );
+
+  myButton.mousePressed(async () => {
+    await insertData(seconds, myInput.value());
+
+    isShowingLeaderBoard = true;
+    myInput.remove();
+    myButton.remove();
+    loop();
+  });
+
+  const onInput = function () {
+    let userInput = this.value();
+
+    if (userInput.length > 3) {
+      this.value(userInput.slice(0, 3));
+    } else {
+      this.value(userInput);
+    }
+  };
+
+  myInput.input(onInput);
+
   if (xScrollingIsEnabled) {
     textSize(30);
     textAlign(CENTER, CENTER);
-    text(
-      '✨🎉YOU WON!!🎉✨',
-      window.innerWidth / 2,
-      window.innerHeight / 2
-    );
+    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 25);
     textSize(14);
     text(
       `🕠It took you ${seconds} seconds to find Smokey!`,
       window.innerWidth / 2,
-      window.innerHeight / 2 + 48
+      75
     );
     text(
       `Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
       window.innerWidth / 2,
-      window.innerHeight / 2 + 64
+      100
     );
+    myInput.position(window.innerWidth / 2, 200);
+    myButton.position(window.innerWidth / 2, 250);
   } else {
-    textSize(48);
+    textSize(40);
     textAlign(CENTER, CENTER);
-    text(
-      '✨🎉YOU WON!!🎉✨',
-      window.innerWidth / 2,
-      window.innerHeight / 2
-    );
+
+    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 50);
     textSize(32);
     text(
-      `🕠It took you ${seconds} seconds to find Smokey! Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
+      `🕠It took you ${seconds} seconds to find Smokey :^) Come back tomorrow to try get a lower time!⏱️`,
       window.innerWidth / 2,
-      window.innerHeight / 2 + 48
+      125
     );
+    myInput.position(window.innerWidth / 2, 200);
+    myButton.position(window.innerWidth / 2, 250);
   }
 
   textSize(24);
@@ -350,7 +396,7 @@ function checkAnswer() {
   if (isCorrect) {
     const endTime = new Date();
     seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
-    insertData(seconds, 'BRI');
+
     isUserWinning = true;
   } else if (!isUserWinning) {
     alert("That's not the right answer...");
@@ -362,24 +408,24 @@ function startGame() {
   startTime = new Date();
 }
 
-function insertData(time, playerName) {
+async function insertData(time, playerName) {
   const url =
     'https://spy-day-da28768a781b.herokuapp.com/leaderboard'; // Replace with your server URL
 
   const data = { time, playerName };
 
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log('Inserted data:', result);
-    })
-    .catch((error) => {
-      console.error('Error inserting data:', error);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
+
+    const result = await response.json();
+    leaderboardData = result;
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
 }
