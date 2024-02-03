@@ -19,9 +19,11 @@ const s3 = new aws.S3();
 
 // Helper function to read data from S3
 async function readDataFromS3() {
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+  const key = `${today}-data.json`;
   const params = {
     Bucket: S3_BUCKET_NAME,
-    Key: 'data.json',
+    Key: key,
   };
 
   try {
@@ -35,9 +37,11 @@ async function readDataFromS3() {
 
 // Function to write data to the S3 bucket
 async function writeDataToS3(data) {
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+  const key = `${today}-data.json`;
   const params = {
     Bucket: S3_BUCKET_NAME,
-    Key: 'data.json',
+    Key: key,
     Body: JSON.stringify(data),
     ContentType: 'application/json',
   };
@@ -48,6 +52,39 @@ async function writeDataToS3(data) {
   } catch (error) {
     console.error('Error writing data to S3:', error);
     throw error; // Re-throw the error to propagate it to the caller
+  }
+}
+
+async function didObjectExist() {
+  try {
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+    const key = `${today}-data.json`;
+
+    // Check if the object exists
+    await s3
+      .headObject({ Bucket: S3_BUCKET_NAME, Key: key })
+      .promise();
+
+    // Object exists, send response
+    return true;
+  } catch (error) {
+    if (error.code === 'NotFound') {
+      // Object doesn't exist, create it with an initial JSON body of []
+      const initialData = [];
+      await s3
+        .putObject({
+          Bucket: S3_BUCKET_NAME,
+          Key: key,
+          Body: JSON.stringify(initialData),
+          ContentType: 'application/json',
+        })
+        .promise();
+      return false;
+    } else {
+      // Unexpected error
+      console.error('Error:', error);
+      return false;
+    }
   }
 }
 
@@ -65,6 +102,8 @@ let mockData = [
 
 //TODO:  When deploying, you should change the ‘AllowedOrigin’ to only accept requests from your domain.
 app.post('/leaderboard', async (req, res) => {
+  const didObjectExist = await didObjectExist();
+  console.info('s3 object existed?', didObjectExist);
   const isLocal = false;
   let data = isLocal ? mockData : await readDataFromS3();
 
