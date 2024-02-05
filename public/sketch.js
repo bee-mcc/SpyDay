@@ -329,13 +329,14 @@ function displayWinScreen() {
       225
     );
   }
+  text(`Choose your name (3 letters)`, window.innerWidth / 2, 450);
   text(
-    `Choose your name (3 letters) and click to see your spot on the SpyDay Daily leaderboard`,
+    `and click to see your spot on the SpyDay Daily leaderboard`,
     window.innerWidth / 2,
-    450
+    475
   );
-  myInput.position(window.innerWidth / 2 - 75, 500);
-  myButton.position(window.innerWidth / 2 - 55, 550);
+  myInput.position(window.innerWidth / 2 - 75, 520);
+  myButton.position(window.innerWidth / 2 - 55, 570);
 
   textSize(24);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 80, 40);
