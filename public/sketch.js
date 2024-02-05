@@ -20,6 +20,7 @@ const smokeypicHeight = 400;
 let startTime;
 let seconds;
 let leaderboardData;
+let frameWhenUserStarted;
 
 //Scrolling Data
 let previousMouseX;
@@ -126,6 +127,17 @@ function displayImage() {
 
   xScrollingIsEnabled = window.innerWidth < canvasWidth;
   yScrollingIsEnabled = window.innerHeight < canvasHeight;
+  if (xScrollingIsEnabled) {
+    frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
+    if (frameCount < frameWhenUserStarted + 450) {
+      textSize(32);
+      fill(255);
+      stroke(0);
+      strokeWeight(4);
+      textAlign(CENTER, CENTER);
+      text('←Scroll left and right→', window.innerWidth / 2, 45);
+    }
+  }
 
   if (!xScrollingIsEnabled && !yScrollingIsEnabled) {
     const retVal = image(
