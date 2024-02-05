@@ -333,7 +333,7 @@ function displayWinScreen() {
   text(
     `and click to see your spot on the SpyDay Daily leaderboard`,
     window.innerWidth / 2,
-    475
+    495
   );
   myInput.position(window.innerWidth / 2 - 75, 520);
   myButton.position(window.innerWidth / 2 - 55, 570);
