@@ -24,8 +24,8 @@ let leaderboardData;
 //Scrolling Data
 let previousMouseX;
 let previousMouseY;
-let offsetX = 0;
-let offsetY = 0;
+let offsetX = canvasWidth / 2 - 275;
+let offsetY = canvasHeight / 2 - 275;
 let isScrolling = false;
 let xScrollingIsEnabled = false;
 let yScrollingIsEnabled = false;
