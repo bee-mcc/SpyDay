@@ -130,6 +130,7 @@ function displayImage() {
   if (xScrollingIsEnabled) {
     frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
     if (frameCount < frameWhenUserStarted + 450) {
+      alert('enabled');
       textSize(32);
       fill(255);
       stroke(0);
