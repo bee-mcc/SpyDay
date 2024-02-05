@@ -185,7 +185,7 @@ function displayImage() {
 
   if (xScrollingIsEnabled) {
     frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
-    if (frameCount < frameWhenUserStarted + 450) {
+    if (frameCount < frameWhenUserStarted + 180) {
       textAlign(CENTER, CENTER);
       textSize(32);
       fill(255);
