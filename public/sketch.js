@@ -78,7 +78,7 @@ function draw() {
       window.innerWidth / 2 - loadingImageWidth / 2,
       window.innerHeight / 2 - loadingImageHeight / 2
     );
-    frameCount++;
+
     textSize(32);
     text(
       'is loading...',
