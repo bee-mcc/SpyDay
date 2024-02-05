@@ -135,8 +135,11 @@ function displayImage() {
       fill(255);
       stroke(0);
       strokeWeight(4);
-      textAlign(CENTER, CENTER);
-      text('←Scroll left and right→', window.innerWidth / 2, 45);
+      text(
+        '←Scroll left and right→',
+        window.innerWidth / 2,
+        window.innerHeight / 2
+      );
     }
   }
 
