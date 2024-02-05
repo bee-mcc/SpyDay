@@ -127,20 +127,6 @@ function displayImage() {
 
   xScrollingIsEnabled = window.innerWidth < canvasWidth;
   yScrollingIsEnabled = window.innerHeight < canvasHeight;
-  if (xScrollingIsEnabled) {
-    frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
-    if (frameCount < frameWhenUserStarted + 450) {
-      textSize(32);
-      fill(255);
-      stroke(0);
-      strokeWeight(4);
-      text(
-        '←Scroll left and right→',
-        window.innerWidth / 2,
-        window.innerHeight / 2
-      );
-    }
-  }
 
   if (!xScrollingIsEnabled && !yScrollingIsEnabled) {
     const retVal = image(
@@ -195,6 +181,21 @@ function displayImage() {
       CONTAIN
     );
     setMouseLocationWithinImage(true, true);
+  }
+
+  if (xScrollingIsEnabled) {
+    frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
+    if (frameCount < frameWhenUserStarted + 450) {
+      textSize(32);
+      fill(255);
+      stroke(0);
+      strokeWeight(4);
+      text(
+        '←Scroll left and right→',
+        window.innerWidth / 2,
+        window.innerHeight / 2
+      );
+    }
   }
 }
 
