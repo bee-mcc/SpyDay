@@ -272,9 +272,7 @@ function displayWinScreen() {
   noLoop();
 
   const myInput = createInput();
-  const myButton = createButton(
-    'Input name (3 letters) and click to see leaderboard'
-  );
+  const myButton = createButton('Go to leaderboard');
 
   myButton.mousePressed(async () => {
     await insertData(seconds, myInput.value());
@@ -296,41 +294,51 @@ function displayWinScreen() {
   };
 
   myInput.input(onInput);
+  textAlign(CENTER, CENTER);
 
   if (xScrollingIsEnabled) {
     textSize(30);
-    textAlign(CENTER, CENTER);
-    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 25);
+    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 175);
+
     textSize(14);
     text(
       `🕠It took you ${seconds} seconds to find Smokey!`,
       window.innerWidth / 2,
-      75
+      225
     );
     text(
       `Nice work :^) Come back tomorrow to try get a lower time!⏱️`,
       window.innerWidth / 2,
-      100
+      250
     );
-    myInput.position(window.innerWidth / 2, 200);
-    myButton.position(window.innerWidth / 2, 250);
   } else {
+    // stroke(255);
+    // line(
+    //   window.innerWidth / 2,
+    //   0,
+    //   window.innerWidth / 2,
+    //   window.innerHeight
+    // );
     textSize(40);
-    textAlign(CENTER, CENTER);
 
-    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 50);
+    text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 175);
     textSize(32);
     text(
       `🕠It took you ${seconds} seconds to find Smokey :^) Come back tomorrow to try get a lower time!⏱️`,
       window.innerWidth / 2,
-      125
+      225
     );
-    myInput.position(window.innerWidth / 2, 200);
-    myButton.position(window.innerWidth / 2, 250);
   }
+  text(
+    `Choose your name (3 letters) and click to see your spot on the SpyDay Daily leaderboard`,
+    window.innerWidth / 2,
+    450
+  );
+  myInput.position(window.innerWidth / 2 - 75, 500);
+  myButton.position(window.innerWidth / 2 - 55, 550);
 
   textSize(24);
-  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 60, 20);
+  text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 80, 40);
   text(
     '╰(⸝⸝⸝´꒳`⸝⸝⸝)╯',
     window.innerWidth - 80,
