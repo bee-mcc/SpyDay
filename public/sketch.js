@@ -22,6 +22,7 @@ let seconds;
 let leaderboardData;
 let frameWhenUserStarted;
 let hasPlayedInThisSession = false;
+let playerID;
 
 //Scrolling Data
 let previousMouseX;
@@ -68,6 +69,7 @@ function preload() {
 }
 
 function setup() {
+  playerID = new Date().valueOf();
   img = loadImage('pic.png', () => (isImageLoading = false));
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
 
@@ -191,7 +193,7 @@ async function insertData(time, playerName) {
   const url =
     'https://spy-day-da28768a781b.herokuapp.com/leaderboard'; // Replace with your server URL
 
-  const data = { time, playerName };
+  const data = { time, playerName, playerID };
 
   try {
     const response = await fetch(url, {
@@ -273,15 +275,34 @@ function displayLeaderBoard() {
   background(color(0, 100, 0)); // Darker green background
   fill(255);
 
+  text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
+
   for (let i = 0; i < 11; i++) {
     const score = leaderboardData[i];
-    text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
     text(
       `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
       window.innerWidth / 2,
       75 * (i + 1)
     );
   }
+  const playerScoreIndex = findPlayerIndex();
+  const playerScore = leaderboardData[playerScoreIndex];
+  text(
+    `Your score: ${playerScoreIndex + 1}. Time: ${
+      playerScore.time
+    }, name: ${playerScore.playerName} `,
+    window.innerWidth / 2,
+    window.innerHeight - 45
+  );
+}
+
+function findPlayerIndex() {
+  for (let i = 0; i < leaderboardData.length; i++) {
+    if (leaderboardData[i].playerID === playerID) {
+      return i;
+    }
+  }
+  return -1; // Player not found in the leaderboard
 }
 
 function displayImage() {

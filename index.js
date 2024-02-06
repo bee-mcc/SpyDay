@@ -112,7 +112,7 @@ app.post('/leaderboard', async (req, res) => {
   const isLocal = false;
   let data = isLocal ? mockData : await readDataFromS3();
 
-  const { time, playerName } = req.body;
+  const { time, playerName, playerID } = req.body;
   console.log(data);
 
   const matcher = new RegExpMatcher({
@@ -123,9 +123,9 @@ app.post('/leaderboard', async (req, res) => {
   const nameIsProfane = matcher.hasMatch(playerName);
 
   if (nameIsProfane) {
-    data.push({ time, playerName: '***' });
+    data.push({ time, playerName: '***', playerID });
   } else {
-    data.push({ time, playerName });
+    data.push({ time, playerName, playerID });
   }
 
   data.sort((a, b) => a.time - b.time);
