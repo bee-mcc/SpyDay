@@ -275,7 +275,17 @@ function displayLeaderBoard() {
   background(color(0, 100, 0)); // Darker green background
   fill(255);
 
-  text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
+  const playerScoreIndex = findPlayerIndex();
+  const playerScore = leaderboardData[playerScoreIndex];
+  text(
+    `YOUR SCORE: Place #${playerScoreIndex + 1} Time: ${
+      playerScore.time
+    }, name: ${playerScore.playerName} `,
+    window.innerWidth / 2,
+    window.innerHeight + 45
+  );
+
+  text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 75);
 
   for (let i = 0; i < 10; i++) {
     const score = leaderboardData[i];
@@ -283,25 +293,17 @@ function displayLeaderBoard() {
       text(
         `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
         window.innerWidth / 2,
-        75 * (i + 1)
+        150 * (i + 1)
       );
     } catch {
       text(
         `Fewer than 10 players have played today!`,
         window.innerWidth / 2,
-        75 * (i + 1)
+        150 * (i + 1)
       );
+      i = 10;
     }
   }
-  const playerScoreIndex = findPlayerIndex();
-  const playerScore = leaderboardData[playerScoreIndex];
-  text(
-    `Your score: ${playerScoreIndex + 1}. Time: ${
-      playerScore.time
-    }, name: ${playerScore.playerName} `,
-    window.innerWidth / 2,
-    window.innerHeight - 45
-  );
 }
 
 function findPlayerIndex() {
