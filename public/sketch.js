@@ -293,13 +293,13 @@ function displayLeaderBoard() {
       text(
         `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
         window.innerWidth / 2,
-        150 * (i + 1)
+        75 * (i + 1)
       );
     } catch {
       text(
         `Fewer than 10 players have played today!`,
         window.innerWidth / 2,
-        150 * (i + 1)
+        75 * (i + 1)
       );
       i = 10;
     }
