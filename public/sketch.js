@@ -82,7 +82,9 @@ function draw() {
   } else {
     clear();
 
-    if (gameStarted) {
+    if (hasUserPlayedToday()) {
+      displayPlayAgainTomorrow();
+    } else if (gameStarted) {
       if (isUserWinning && !isShowingLeaderBoard) {
         displayWinScreen();
       } else if (!isShowingLeaderBoard) {
@@ -103,6 +105,24 @@ function draw() {
 // ============
 function shouldShowLoadingScreen(isLoading) {
   return isLoading || frameCount < 250;
+}
+
+function hasUserPlayedToday() {
+  const storedDataString = sessionStorage.getItem('savedTime');
+
+  if (storedDataString) {
+    const storedData = JSON.parse(storedDataString);
+
+    const currentDate = new Date();
+
+    return (
+      storedData.date === currentDate.getDate() &&
+      storedData.month === currentDate.getMonth() &&
+      storedData.year === currentDate.getFullYear()
+    );
+  }
+
+  return false;
 }
 
 // ============
@@ -149,6 +169,17 @@ function setMouseLocationWithinImage(
   //text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
 
+function saveUserPlayedToSessionStorage() {
+  const currentDate = new Date();
+  const storedData = {
+    date: currentDate.getDate(),
+    month: currentDate.getMonth(),
+    year: currentDate.getFullYear(),
+  };
+
+  sessionStorage.setItem('savedTime', JSON.stringify(storedData));
+}
+
 // ============
 // ============
 //HELPER METHODS - network
@@ -182,6 +213,35 @@ async function insertData(time, playerName) {
 //SCREENS
 // ============
 // ============
+function displayPlayAgainTomorrow() {
+  // Rainbow colors
+  const colors = [
+    '#FF0000',
+    '#FF7F00',
+    '#FFFF00',
+    '#00FF00',
+    '#0000FF',
+    '#4B0082',
+    '#8B00FF',
+  ];
+
+  for (let i = 0; i < width; i++) {
+    const inter = map(i, 0, width, 0, 1);
+    const c = lerpColor(
+      color(colors[0]),
+      color(colors[colors.length - 1]),
+      inter
+    );
+    stroke(c);
+    line(i, 0, i, height);
+  }
+
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  text('Come back tomorrow to play again!', width / 2, height / 2);
+}
+
 function displayLoadingScreen() {
   image(
     loadingImage,
@@ -337,6 +397,7 @@ function displayStartScreen() {
 }
 
 function displayWinScreen() {
+  saveUserPlayedToSessionStorage();
   clear();
   background(color(0, 100, 0)); // Darker green background
   fill(255);
