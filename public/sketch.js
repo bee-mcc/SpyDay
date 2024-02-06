@@ -237,10 +237,16 @@ function displayPlayAgainTomorrow() {
     line(i, 0, i, height);
   }
 
-  textSize(32);
   textAlign(CENTER, CENTER);
   fill(255);
-  text('Come back tomorrow to play again!', width / 2, height / 2);
+  if (xScrollingIsEnabled) {
+    textSize(24);
+    text('Come back tomorrow', width / 2, height / 2);
+    text('to play again!', width / 2, height / 2 + 30);
+  } else {
+    textSize(32);
+    text('Come back tomorrow to play again!', width / 2, height / 2);
+  }
 }
 
 function displayLoadingScreen() {
