@@ -111,7 +111,7 @@ function shouldShowLoadingScreen(isLoading) {
 }
 
 function hasUserPlayedToday() {
-  const storedDataString = sessionStorage.getItem('savedTime');
+  const storedDataString = localStorage.getItem('savedTime');
 
   if (storedDataString) {
     const storedData = JSON.parse(storedDataString);
@@ -180,7 +180,7 @@ function saveUserPlayedToSessionStorage() {
     year: currentDate.getFullYear(),
   };
 
-  sessionStorage.setItem('savedTime', JSON.stringify(storedData));
+  localStorage.setItem('savedTime', JSON.stringify(storedData));
 }
 
 // ============
