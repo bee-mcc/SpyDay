@@ -279,11 +279,19 @@ function displayLeaderBoard() {
 
   for (let i = 0; i < 10; i++) {
     const score = leaderboardData[i];
-    text(
-      `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
-      window.innerWidth / 2,
-      75 * (i + 1)
-    );
+    try {
+      text(
+        `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
+        window.innerWidth / 2,
+        75 * (i + 1)
+      );
+    } catch {
+      text(
+        `Fewer than 10 players have played today!`,
+        window.innerWidth / 2,
+        75 * (i + 1)
+      );
+    }
   }
   const playerScoreIndex = findPlayerIndex();
   const playerScore = leaderboardData[playerScoreIndex];
