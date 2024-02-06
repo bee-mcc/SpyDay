@@ -277,7 +277,7 @@ function displayLeaderBoard() {
 
   text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 35);
 
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 10; i++) {
     const score = leaderboardData[i];
     text(
       `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
