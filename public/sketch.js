@@ -293,7 +293,7 @@ function displayLeaderBoard() {
       text(
         `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
         window.innerWidth / 2,
-        25 + 75 * (i + 1)
+        50 + 75 * (i + 1)
       );
     } catch {
       text(
