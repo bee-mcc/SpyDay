@@ -21,6 +21,7 @@ let startTime;
 let seconds;
 let leaderboardData;
 let frameWhenUserStarted;
+let hasPlayedInThisSession = false;
 
 //Scrolling Data
 let previousMouseX;
@@ -82,7 +83,7 @@ function draw() {
   } else {
     clear();
 
-    if (hasUserPlayedToday()) {
+    if (hasUserPlayedToday() && !hasPlayedInThisSession) {
       displayPlayAgainTomorrow();
     } else if (gameStarted) {
       if (isUserWinning && !isShowingLeaderBoard) {
@@ -398,6 +399,7 @@ function displayStartScreen() {
 
 function displayWinScreen() {
   saveUserPlayedToSessionStorage();
+  hasPlayedInThisSession = true;
   clear();
   background(color(0, 100, 0)); // Darker green background
   fill(255);
