@@ -282,10 +282,10 @@ function displayLeaderBoard() {
       playerScore.time
     }, name: ${playerScore.playerName} `,
     window.innerWidth / 2,
-    window.innerHeight + 45
+    45
   );
 
-  text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 75);
+  text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 100);
 
   for (let i = 0; i < 10; i++) {
     const score = leaderboardData[i];
@@ -293,13 +293,13 @@ function displayLeaderBoard() {
       text(
         `${i + 1}. Time: ${score.time}, name: ${score.playerName} `,
         window.innerWidth / 2,
-        75 * (i + 1)
+        25 + 75 * (i + 1)
       );
     } catch {
       text(
         `Fewer than 10 players have played today!`,
         window.innerWidth / 2,
-        75 * (i + 1)
+        25 + 75 * (i + 1)
       );
       i = 10;
     }
