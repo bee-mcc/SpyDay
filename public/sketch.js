@@ -239,7 +239,9 @@ function displayPlayAgainTomorrow() {
 
   textAlign(CENTER, CENTER);
   fill(255);
-  if (xScrollingIsEnabled) {
+
+  const xScrollingEnabled = window.innerWidth < canvasWidth;
+  if (xScrollingEnabled) {
     textSize(24);
     text('Come back tomorrow', width / 2, height / 2);
     text('to play again!', width / 2, height / 2 + 30);
