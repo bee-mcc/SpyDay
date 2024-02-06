@@ -45,19 +45,23 @@ let answer = [
 let mouseXWithinImage;
 let mouseYWithinImage;
 
-/* prevents the mobile browser from processing some default
- * touch events, like swiping left for "back" or scrolling the page.
- */
+// ============
+// ============
+//Setup code
+// ============
+// ============
+
+//prevents the mobile browser from processing some default
+// touch events, like swiping left for "back" or scrolling the page.
 document.ontouchmove = function (event) {
   event.preventDefault();
 };
 
-function windowResized() {
-  offsetX = 0;
-  offsetY = 0;
-  resizeCanvas(window.innerWidth, window.innerHeight);
-}
-
+// ============
+// ============
+//p5 functions
+// ============
+// ============
 function preload() {
   loadingImage = loadImage('loading.gif');
 }
@@ -73,19 +77,8 @@ function setup() {
 function draw() {
   const isLoading = isImageLoading || isAnswerLoading;
 
-  if (isLoading || frameCount < 250) {
-    image(
-      loadingImage,
-      window.innerWidth / 2 - loadingImageWidth / 2,
-      window.innerHeight / 2 - loadingImageHeight / 2
-    );
-
-    textSize(32);
-    text(
-      'is loading...',
-      window.innerWidth / 2 - 60,
-      window.innerHeight / 2 + 190
-    );
+  if (shouldShowLoadingScreen(isLoading)) {
+    displayLoadingScreen();
   } else {
     clear();
 
@@ -101,6 +94,108 @@ function draw() {
       displayStartScreen();
     }
   }
+}
+
+// ============
+// ============
+//HELPER METHODS - variable getters/readers
+// ============
+// ============
+function shouldShowLoadingScreen(isLoading) {
+  return isLoading || frameCount < 250;
+}
+
+// ============
+// ============
+//HELPER METHODS - variable setters
+// ============
+// ============
+function startGame() {
+  gameStarted = true;
+  startTime = new Date();
+}
+
+function setMouseLocationWithinImage(
+  isXScrollingEnabled,
+  isYScollingEnabled
+) {
+  if (!isXScrollingEnabled && !isYScollingEnabled) {
+    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
+    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
+
+    if (mouseX > leftBorder) {
+      mouseXWithinImage = mouseX - leftBorder;
+    }
+    if (mouseY > topBorder) {
+      mouseYWithinImage = mouseY - topBorder;
+    }
+  } else if (isXScrollingEnabled && !isYScollingEnabled) {
+    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
+    mouseXWithinImage = mouseX + offsetX;
+    if (mouseY > topBorder) {
+      mouseYWithinImage = mouseY - topBorder;
+    }
+  } else if (isYScollingEnabled && !isXScrollingEnabled) {
+    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
+    mouseYWithinImage = mouseY + offsetY;
+    if (mouseX > leftBorder) {
+      mouseXWithinImage = mouseX - topBorder;
+    }
+  } else {
+    mouseXWithinImage = mouseX + offsetX;
+    mouseYWithinImage = mouseY + offsetY;
+  }
+
+  //text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
+}
+
+// ============
+// ============
+//HELPER METHODS - network
+// ============
+// ============
+
+async function insertData(time, playerName) {
+  const url =
+    'https://spy-day-da28768a781b.herokuapp.com/leaderboard'; // Replace with your server URL
+
+  const data = { time, playerName };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    leaderboardData = result;
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+}
+
+// ============
+// ============
+//SCREENS
+// ============
+// ============
+function displayLoadingScreen() {
+  image(
+    loadingImage,
+    window.innerWidth / 2 - loadingImageWidth / 2,
+    window.innerHeight / 2 - loadingImageHeight / 2
+  );
+
+  strokeWeight(1);
+  textSize(32);
+  text(
+    'is loading...',
+    window.innerWidth / 2 - 60,
+    window.innerHeight / 2 + 190
+  );
 }
 
 function displayLeaderBoard() {
@@ -198,46 +293,6 @@ function displayImage() {
       );
     }
   }
-}
-
-//TODO this solution works for the base case of a window larger than our answer image - now it needs to work for the remaining 3 cases
-// x scrolling enabled
-// y scrolling enabled
-// x and y scrolling enabled
-// also add the text displaying where the mouse is within the image as a "debug mode"
-// btw... will this work for mobile? we don't keep a persistant store of the "mouse location" since it's all touches...
-function setMouseLocationWithinImage(
-  isXScrollingEnabled,
-  isYScollingEnabled
-) {
-  if (!isXScrollingEnabled && !isYScollingEnabled) {
-    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
-    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
-
-    if (mouseX > leftBorder) {
-      mouseXWithinImage = mouseX - leftBorder;
-    }
-    if (mouseY > topBorder) {
-      mouseYWithinImage = mouseY - topBorder;
-    }
-  } else if (isXScrollingEnabled && !isYScollingEnabled) {
-    const topBorder = window.innerHeight / 2 - canvasHeight / 2;
-    mouseXWithinImage = mouseX + offsetX;
-    if (mouseY > topBorder) {
-      mouseYWithinImage = mouseY - topBorder;
-    }
-  } else if (isYScollingEnabled && !isXScrollingEnabled) {
-    const leftBorder = window.innerWidth / 2 - canvasWidth / 2;
-    mouseYWithinImage = mouseY + offsetY;
-    if (mouseX > leftBorder) {
-      mouseXWithinImage = mouseX - topBorder;
-    }
-  } else {
-    mouseXWithinImage = mouseX + offsetX;
-    mouseYWithinImage = mouseY + offsetY;
-  }
-
-  //text(`${mouseXWithinImage}, ${mouseYWithinImage}`, 15, 15);
 }
 
 function displayStartScreen() {
@@ -364,6 +419,41 @@ function displayWinScreen() {
   );
 }
 
+// ============
+// ============
+//Answer logic
+// ============
+// ============
+function checkAnswer() {
+  const xCorrect =
+    mouseXWithinImage > answer[0][0] &&
+    mouseXWithinImage < answer[0][1];
+  const yCorrect =
+    mouseYWithinImage > answer[1][0] &&
+    mouseYWithinImage < answer[1][1];
+  const isCorrect = xCorrect && yCorrect;
+
+  if (isCorrect) {
+    const endTime = new Date();
+    seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
+
+    isUserWinning = true;
+  } else if (!isUserWinning) {
+    alert("That's not the right answer...");
+  }
+}
+
+// ============
+// ============
+//p5 event listeners
+// ============
+// ============
+function windowResized() {
+  offsetX = 0;
+  offsetY = 0;
+  resizeCanvas(window.innerWidth, window.innerHeight);
+}
+
 function touchStarted() {
   setMouseLocationWithinImage(
     xScrollingIsEnabled,
@@ -407,51 +497,5 @@ function touchEnded() {
     } else {
       startGame();
     }
-  }
-}
-
-function checkAnswer() {
-  const xCorrect =
-    mouseXWithinImage > answer[0][0] &&
-    mouseXWithinImage < answer[0][1];
-  const yCorrect =
-    mouseYWithinImage > answer[1][0] &&
-    mouseYWithinImage < answer[1][1];
-  const isCorrect = xCorrect && yCorrect;
-
-  if (isCorrect) {
-    const endTime = new Date();
-    seconds = (endTime.valueOf() - startTime.valueOf()) / 1000;
-
-    isUserWinning = true;
-  } else if (!isUserWinning) {
-    alert("That's not the right answer...");
-  }
-}
-
-function startGame() {
-  gameStarted = true;
-  startTime = new Date();
-}
-
-async function insertData(time, playerName) {
-  const url =
-    'https://spy-day-da28768a781b.herokuapp.com/leaderboard'; // Replace with your server URL
-
-  const data = { time, playerName };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-    leaderboardData = result;
-  } catch (error) {
-    console.error('Error inserting data:', error);
   }
 }
