@@ -596,6 +596,7 @@ function touchEnded() {
   if (frameCount >= 200 && !isLoading && !hasUserPlayedToday()) {
     if (gameStarted) {
       checkAnswer();
+      return true;
     } else {
       startGame();
     }
