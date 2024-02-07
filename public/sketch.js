@@ -600,4 +600,5 @@ function touchEnded() {
       startGame();
     }
   }
+  return false;
 }
