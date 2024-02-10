@@ -107,34 +107,38 @@ let mockData = [
 
 //TODO:  When deploying, you should change the ‘AllowedOrigin’ to only accept requests from your domain.
 app.post('/leaderboard', async (req, res) => {
-  const didObjectExistResult = await didObjectExist();
-  console.info('s3 object existed?', didObjectExistResult);
-  const isLocal = false;
-  let data = isLocal ? mockData : await readDataFromS3();
+  try {
+    const didObjectExistResult = await didObjectExist();
+    console.info('s3 object existed?', didObjectExistResult);
+    const isLocal = false;
+    let data = isLocal ? mockData : await readDataFromS3();
 
-  const { time, playerName, playerID } = req.body;
-  console.log(data);
+    const { time, playerName, playerID } = req.body;
+    console.log(data);
 
-  const matcher = new RegExpMatcher({
-    ...englishDataset.build(),
-    ...englishRecommendedTransformers,
-  });
+    const matcher = new RegExpMatcher({
+      ...englishDataset.build(),
+      ...englishRecommendedTransformers,
+    });
 
-  const nameIsProfane = matcher.hasMatch(playerName);
+    const nameIsProfane = matcher.hasMatch(playerName);
 
-  if (nameIsProfane) {
-    data.push({ time, playerName: '***', playerID });
-  } else {
-    data.push({ time, playerName, playerID });
+    if (nameIsProfane) {
+      data.push({ time, playerName: '***', playerID });
+    } else {
+      data.push({ time, playerName, playerID });
+    }
+
+    data.sort((a, b) => a.time - b.time);
+
+    if (!isLocal) {
+      writeDataToS3(data);
+    }
+
+    res.json(data);
+  } catch (e) {
+    console.error(e);
   }
-
-  data.sort((a, b) => a.time - b.time);
-
-  if (!isLocal) {
-    writeDataToS3(data);
-  }
-
-  res.json(data);
 });
 
 // Start the server
