@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const aws = require('aws-sdk');
+const cors = require('cors');
 const {
   RegExpMatcher,
   TextCensor,
