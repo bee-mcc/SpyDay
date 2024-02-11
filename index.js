@@ -1,9 +1,6 @@
-// app.js
-
 const express = require('express');
 const path = require('path');
 const aws = require('aws-sdk');
-const { write } = require('fs');
 const {
   RegExpMatcher,
   TextCensor,
@@ -14,7 +11,7 @@ const {
 const app = express();
 const port = 3000;
 
-//aws settings
+// aws settings
 const S3_BUCKET_NAME = process.env.S3_BUCKET;
 aws.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -95,6 +92,14 @@ async function didObjectExist() {
 
 // Serve static files (including the HTML file)
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware to set Content-Type for JavaScript files
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
 
 app.use(express.json());
 
