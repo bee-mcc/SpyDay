@@ -15,6 +15,7 @@ const loadingImageWidth = 355;
 const loadingImageHeight = 261;
 const smokeypicWidth = 320;
 const smokeypicHeight = 400;
+const baseTextSize = window.innerWidth < 450 ? 16 : 32;
 
 // Game MetaData
 let startTime;
@@ -244,11 +245,11 @@ function displayPlayAgainTomorrow() {
 
   const xScrollingEnabled = window.innerWidth < canvasWidth;
   if (xScrollingEnabled) {
-    textSize(24);
+    textSize(baseTextSize - 2);
     text('Come back tomorrow', width / 2, height / 2);
     text('to play again!', width / 2, height / 2 + 30);
   } else {
-    textSize(32);
+    textSize(baseTextSize);
     text('Come back tomorrow to play again!', width / 2, height / 2);
   }
 }
@@ -261,10 +262,10 @@ function displayLoadingScreen() {
   );
 
   strokeWeight(1);
-  textSize(32);
+  textSize(baseTextSize);
   text(
     'is loading...',
-    window.innerWidth / 2 - 60,
+    window.innerWidth / 2 - 50,
     window.innerHeight / 2 + 190
   );
 }
@@ -382,7 +383,7 @@ function displayImage() {
     frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
     if (frameCount < frameWhenUserStarted + 180) {
       textAlign(CENTER, CENTER);
-      textSize(32);
+      textSize(baseTextSize - 2);
       fill(255);
       stroke(0);
       strokeWeight(4);
@@ -399,14 +400,14 @@ function displayStartScreen() {
   clear();
   background(220);
 
-  textSize(32);
+  textSize(baseTextSize + 4);
   fill(255);
   stroke(0);
   strokeWeight(4);
   text(
     'This is Smokey Robinson',
-    window.innerWidth < 450 ? 5 : 75,
-    75
+    window.innerWidth < 450 ? 25 : 75,
+    200
   );
 
   answerImage.resize(smokeypicWidth, smokeypicHeight);
@@ -418,8 +419,11 @@ function displayStartScreen() {
 
   text(
     'Find him and click to win!',
-    window.innerWidth - 375,
-    window.innerHeight - 75
+    //window.innerWidth < 450 ? 25 : 75
+    window.innerWidth < 450
+      ? window.innerWidth - 250
+      : window.innerWidth - 450,
+    window.innerHeight - 150
   );
 
   const pulseSpeed = 0.05;
@@ -441,7 +445,7 @@ function displayWinScreen() {
   hasPlayedInThisSession = true;
   clear();
   background(color(0, 100, 0)); // Darker green background
-  fill(255);
+  // fill(255);
 
   noLoop();
 
@@ -471,10 +475,10 @@ function displayWinScreen() {
   textAlign(CENTER, CENTER);
 
   if (xScrollingIsEnabled) {
-    textSize(30);
+    textSize(baseTextSize + 4);
     text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 175);
 
-    textSize(14);
+    textSize(baseTextSize - 4);
     text(
       `🕠It took you ${seconds} seconds to find Smokey!`,
       window.innerWidth / 2,
@@ -493,10 +497,10 @@ function displayWinScreen() {
     //   window.innerWidth / 2,
     //   window.innerHeight
     // );
-    textSize(40);
+    textSize(baseTextSize + 1);
 
     text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 175);
-    textSize(32);
+    textSize(baseTextSize + 4);
     text(
       `🕠It took you ${seconds} seconds to find Smokey :^) Come back tomorrow to try get a lower time!⏱️`,
       window.innerWidth / 2,
@@ -512,7 +516,7 @@ function displayWinScreen() {
   myInput.position(window.innerWidth / 2 - 75, 520);
   myButton.position(window.innerWidth / 2 - 55, 570);
 
-  textSize(24);
+  textSize(baseTextSize - 2);
   text('╰(⸝⸝⸝´꒳`⸝⸝⸝)╯', 80, 40);
   text(
     '╰(⸝⸝⸝´꒳`⸝⸝⸝)╯',
