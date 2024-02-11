@@ -9,6 +9,7 @@ const {
 } = require('obscenity');
 
 const app = express();
+app.use(cors());
 const port = 3000;
 
 // aws settings
