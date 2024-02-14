@@ -275,6 +275,7 @@ function displayLeaderBoard() {
   clear();
   background(color(0, 100, 0)); // Darker green background
   fill(255);
+  textFont('PressStart2P');
 
   const playerScoreIndex = findPlayerIndex();
   const playerScore = leaderboardData[playerScoreIndex];
@@ -451,8 +452,9 @@ function displayWinScreen() {
 
   const myInput = createInput();
   const myButton = createButton('Go to leaderboard');
+  myButton.elt.addEventListener('click', async function (event) {
+    event.preventDefault();
 
-  myButton.mousePressed(async () => {
     await insertData(seconds, myInput.value());
 
     isShowingLeaderBoard = true;
