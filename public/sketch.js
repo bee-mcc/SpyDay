@@ -24,6 +24,7 @@ let leaderboardData;
 let frameWhenUserStarted;
 let hasPlayedInThisSession = false;
 let playerID;
+let loadingFrames = 90;
 
 //Scrolling Data
 let previousMouseX;
@@ -79,17 +80,19 @@ function setup() {
 }
 
 function draw() {
-  const isLoading = isImageLoading || isAnswerLoading;
+  isAnswerLoading;
 
-  if (shouldShowLoadingScreen(isLoading)) {
-    displayLoadingScreen();
+  if (shouldShowLoadingScreen(isAnswerLoading)) {
+    displayLoadingScreen(false);
   } else {
     clear();
 
     if (hasUserPlayedToday() && !hasPlayedInThisSession) {
       displayPlayAgainTomorrow();
     } else if (gameStarted) {
-      if (isUserWinning && !isShowingLeaderBoard) {
+      if (shouldShowLoadingScreen(isImageLoading)) {
+        displayLoadingScreen(true);
+      } else if (isUserWinning && !isShowingLeaderBoard) {
         displayWinScreen();
       } else if (!isShowingLeaderBoard) {
         displayImage();
@@ -97,7 +100,7 @@ function draw() {
         displayLeaderBoard();
       }
     } else {
-      displayStartScreen();
+      displayStartScreen(); //gameStarted is set here
     }
   }
 }
@@ -108,7 +111,7 @@ function draw() {
 // ============
 // ============
 function shouldShowLoadingScreen(isLoading) {
-  return isLoading || frameCount < 250;
+  return isLoading || frameCount < loadingFrames;
 }
 
 function hasUserPlayedToday() {
@@ -254,7 +257,7 @@ function displayPlayAgainTomorrow() {
   }
 }
 
-function displayLoadingScreen() {
+function displayLoadingScreen(isStillLoading) {
   image(
     loadingImage,
     window.innerWidth / 2 - loadingImageWidth / 2,
@@ -264,7 +267,7 @@ function displayLoadingScreen() {
   strokeWeight(1);
   textSize(baseTextSize);
   text(
-    'is loading...',
+    `is${isStillLoading ? ' still' : ''} loading...`,
     window.innerWidth / 2 - 50,
     window.innerHeight / 2 + 190
   );
@@ -381,6 +384,7 @@ function displayImage() {
   }
 
   if (xScrollingIsEnabled) {
+    //What does this do??
     frameWhenUserStarted = frameWhenUserStarted ?? frameCount;
     if (frameCount < frameWhenUserStarted + 180) {
       textAlign(CENTER, CENTER);
@@ -594,12 +598,17 @@ function touchMoved() {
 }
 
 function touchEnded() {
+  console.log('firing', frameCount);
   if (isScrolling) {
     isScrolling = false;
     return;
   }
-  const isLoading = isImageLoading || isAnswerLoading;
-  if (frameCount >= 200 && !isLoading && !hasUserPlayedToday()) {
+
+  if (
+    frameCount >= loadingFrames &&
+    !isAnswerLoading &&
+    !hasUserPlayedToday()
+  ) {
     if (gameStarted) {
       checkAnswer();
     } else {
