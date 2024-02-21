@@ -280,6 +280,8 @@ function displayLeaderBoard() {
   fill(255);
   textFont('PressStart2P');
 
+  textSize(xScrollingIsEnabled ? baseTextSize - 3 : baseTextSize);
+
   const playerScoreIndex = findPlayerIndex();
   const playerScore = leaderboardData[playerScoreIndex];
   text(
@@ -481,6 +483,7 @@ function displayWinScreen() {
   textAlign(CENTER, CENTER);
 
   if (xScrollingIsEnabled) {
+    strokeWeight(0);
     textSize(baseTextSize + 4);
     text('✨🎉YOU WON!!🎉✨', window.innerWidth / 2, 175);
 
