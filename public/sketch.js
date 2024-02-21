@@ -71,6 +71,7 @@ function preload() {
 }
 
 function setup() {
+  pixelDensity(1);
   playerID = new Date().valueOf();
   img = loadImage('pic.png', () => (isImageLoading = false));
   answerImage = loadImage('cat.png', () => (isAnswerLoading = false));
