@@ -278,19 +278,31 @@ function displayLeaderBoard() {
   clear();
   background(color(0, 100, 0)); // Darker green background
   fill(255);
+  strokeWeight(1);
   textFont('PressStart2P');
 
   textSize(xScrollingIsEnabled ? baseTextSize - 3 : baseTextSize);
 
   const playerScoreIndex = findPlayerIndex();
   const playerScore = leaderboardData[playerScoreIndex];
-  text(
-    `YOUR SCORE: Place #${playerScoreIndex + 1} Time: ${
-      playerScore.time
-    }, name: ${playerScore.playerName} `,
-    window.innerWidth / 2,
-    45
-  );
+  if (xScrollingIsEnabled) {
+    text(`YOUR SCORE:`, window.innerWidth / 2, 45);
+    text(
+      `Place #${playerScoreIndex + 1} Time: ${
+        playerScore.time
+      }, name: ${playerScore.playerName} `,
+      window.innerWidth / 2,
+      60
+    );
+  } else {
+    text(
+      `YOUR SCORE: Place #${playerScoreIndex + 1} Time: ${
+        playerScore.time
+      }, name: ${playerScore.playerName} `,
+      window.innerWidth / 2,
+      45
+    );
+  }
 
   text('👾👾👾👾 HIGH SCORES 👾👾👾👾', window.innerWidth / 2, 100);
 
@@ -304,7 +316,7 @@ function displayLeaderBoard() {
       );
     } catch {
       text(
-        `Fewer than 10 players have played today!`,
+        `==END OF LIST==`,
         window.innerWidth / 2,
         25 + 75 * (i + 1)
       );
