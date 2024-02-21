@@ -265,7 +265,6 @@ function displayLoadingScreen(isStillLoading) {
     window.innerHeight / 2 - loadingImageHeight / 2
   );
 
-  strokeWeight(1);
   textSize(baseTextSize);
   text(
     `is${isStillLoading ? ' still' : ''} loading...`,
@@ -413,7 +412,7 @@ function displayStartScreen() {
   text(
     'This is Smokey Robinson',
     window.innerWidth < 450 ? 25 : 75,
-    200
+    120
   );
 
   answerImage.resize(smokeypicWidth, smokeypicHeight);
@@ -429,7 +428,7 @@ function displayStartScreen() {
     window.innerWidth < 450
       ? window.innerWidth - 250
       : window.innerWidth - 450,
-    window.innerHeight - 150
+    window.innerHeight - 120
   );
 
   const pulseSpeed = 0.05;
