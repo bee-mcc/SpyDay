@@ -502,7 +502,7 @@ function displayWinScreen() {
   //   }
   // };
 
-  myInput.input(onInput);
+  // myInput.input(onInput);
   textAlign(CENTER, CENTER);
 
   if (xScrollingIsEnabled) {
