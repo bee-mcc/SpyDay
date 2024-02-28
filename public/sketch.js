@@ -490,15 +490,17 @@ function displayWinScreen() {
     }
   });
 
-  const onInput = function () {
-    let userInput = this.value();
+  //if this fixes things, then maybe just try adding eventlistener directly to myInput.elt?
 
-    if (userInput.length > 3) {
-      this.value(userInput.slice(0, 3));
-    } else {
-      this.value(userInput);
-    }
-  };
+  // const onInput = function () {
+  //   let userInput = this.value();
+
+  //   if (userInput.length > 3) {
+  //     this.value(userInput.slice(0, 3));
+  //   } else {
+  //     this.value(userInput);
+  //   }
+  // };
 
   myInput.input(onInput);
   textAlign(CENTER, CENTER);
