@@ -15,7 +15,7 @@ const loadingImageWidth = 355;
 const loadingImageHeight = 261;
 const smokeypicWidth = 320;
 const smokeypicHeight = 400;
-const baseTextSize = window.innerWidth < 450 ? 16 : 32;
+let baseTextSize;
 
 // Game MetaData
 let startTime;
@@ -78,6 +78,7 @@ function setup() {
 
   loadingImage.delay(100);
   createCanvas(window.innerWidth, window.innerHeight);
+  baseTextSize = window.innerWidth < 450 ? 16 : 32;
 }
 
 function draw() {
@@ -470,7 +471,8 @@ function displayWinScreen() {
 
   const myInput = createInput();
   const myButton = createButton('Go to leaderboard');
-  myButton.elt.addEventListener('click', async function (event) {
+
+  const finishedInputFunc = async function (event) {
     event.preventDefault();
 
     await insertData(seconds, myInput.value());
@@ -479,6 +481,13 @@ function displayWinScreen() {
     myInput.remove();
     myButton.remove();
     loop();
+  };
+
+  myButton.elt.addEventListener('click', finishedInputFunc);
+  myInput.elt.addEventListener('keyup', function onEvent(e) {
+    if (e.keyCode === 13) {
+      finishedInputFunc();
+    }
   });
 
   const onInput = function () {
