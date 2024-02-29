@@ -5,4 +5,5 @@ function setup() {
 function draw() {
   const myInput = createInput();
   myInput.position(window.innerWidth / 2 - 75, 520);
+  noLoop();
 }
