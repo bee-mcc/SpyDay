@@ -490,17 +490,17 @@ function displayWinScreen() {
     }
   });
 
-  // const onInput = function () {
-  //   let userInput = this.value();
+  const onInput = function () {
+    let userInput = this.value();
 
-  //   if (userInput.length > 3) {
-  //     this.value(userInput.slice(0, 3));
-  //   } else {
-  //     this.value(userInput);
-  //   }
-  // };
+    if (userInput.length > 3) {
+      this.value(userInput.slice(0, 3));
+    } else {
+      this.value(userInput);
+    }
+  };
 
-  // myInput.input(onInput);
+  myInput.input(onInput);
   textAlign(CENTER, CENTER);
 
   if (xScrollingIsEnabled) {
@@ -595,6 +595,7 @@ function touchStarted() {
     xScrollingIsEnabled,
     yScrollingIsEnabled
   );
+  return false;
 }
 
 function touchMoved() {
