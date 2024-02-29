@@ -595,7 +595,6 @@ function touchStarted() {
     xScrollingIsEnabled,
     yScrollingIsEnabled
   );
-  return false;
 }
 
 function touchMoved() {
