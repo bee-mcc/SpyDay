@@ -10,26 +10,36 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     if (isDesktop) {
       if (isLargerThanImage) {
-        canvas.style.width = `${window.innerWidth}px`;
-        canvas.style.height = `${window.innerHeight}px`;
+        canvas.style.width = `${image.width}px`;
+        canvas.style.height = `${image.height}px`;
+        canvas.style.overflow = 'visible';
+        canvas.style.display = 'flex';
+        canvas.style.justifyContent = 'center';
+        canvas.style.alignItems = 'center';
       } else {
         const widthRatio = window.innerWidth / image.width;
         const heightRatio = window.innerHeight / image.height;
         const minRatio = Math.min(widthRatio, heightRatio);
 
-        canvas.style.width = `${image.width * minRatio}px`;
-        canvas.style.height = `${image.height * minRatio}px`;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+        canvas.style.overflow = 'hidden';
+        canvas.style.display = 'flex';
+        canvas.style.justifyContent = 'center';
+        canvas.style.alignItems = 'center';
 
-        const offsetX =
-          (window.innerWidth - image.width * minRatio) / 2;
-        const offsetY =
-          (window.innerHeight - image.height * minRatio) / 2;
-        image.style.left = `${offsetX}px`;
-        image.style.top = `${offsetY}px`;
+        const offsetX = (image.width - window.innerWidth) / 2;
+        const offsetY = (image.height - window.innerHeight) / 2;
+        image.style.left = `-${offsetX}px`;
+        image.style.top = `-${offsetY}px`;
       }
     } else {
       canvas.style.width = `${image.width}px`;
       canvas.style.height = `${image.height}px`;
+      canvas.style.overflow = 'visible';
+      canvas.style.display = 'flex';
+      canvas.style.justifyContent = 'center';
+      canvas.style.alignItems = 'center';
     }
   }
 
