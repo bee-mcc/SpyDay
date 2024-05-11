@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
 
   window.addEventListener('resize', adjustImagePosition);
 
-  function revealImage(event: MouseEvent) {
+  function revealImage(event: MouseEvent | TouchEvent) {
     const diameter = 40;
     const x = event.clientX;
     const y = event.clientY;
@@ -50,6 +50,7 @@ window.addEventListener('load', () => {
   }
 
   window.addEventListener('mousemove', revealImage);
+  window.addEventListener('touchmove', revealImage);
 
   document.body.appendChild(overlay);
 });

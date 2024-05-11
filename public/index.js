@@ -27,13 +27,21 @@ window.addEventListener('load', function () {
     window.addEventListener('resize', adjustImagePosition);
     function revealImage(event) {
         var diameter = 40;
-        var x = event.clientX;
-        var y = event.clientY;
+        var x, y;
+        if (event instanceof MouseEvent) {
+            x = event.clientX;
+            y = event.clientY;
+        }
+        else if (event instanceof TouchEvent) {
+            x = event.touches[0].clientX;
+            y = event.touches[0].clientY;
+        }
         var canvasRect = overlay.getBoundingClientRect();
         var gradientX = ((x - canvasRect.left) / canvasRect.width) * 100;
         var gradientY = ((y - canvasRect.top) / canvasRect.height) * 100;
         overlay.style.backgroundImage = "radial-gradient(circle at ".concat(gradientX, "% ").concat(gradientY, "%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) ").concat(diameter / 2, "%, rgba(0, 0, 0, 1) 100%)");
     }
     window.addEventListener('mousemove', revealImage);
+    window.addEventListener('touchmove', revealImage);
     document.body.appendChild(overlay);
 });
