@@ -56,6 +56,15 @@ window.addEventListener('load', () => {
     }%, rgba(0, 0, 0, 1) 100%)`;
   }
 
+  // Disable page reload on touchmove
+  document.body.addEventListener(
+    'touchmove',
+    function (event) {
+      event.preventDefault();
+    },
+    { passive: false }
+  );
+
   window.addEventListener('mousemove', revealImage);
   window.addEventListener('touchmove', revealImage);
 

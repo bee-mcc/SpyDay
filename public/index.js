@@ -41,6 +41,10 @@ window.addEventListener('load', function () {
         var gradientY = ((y - canvasRect.top) / canvasRect.height) * 100;
         overlay.style.backgroundImage = "radial-gradient(circle at ".concat(gradientX, "% ").concat(gradientY, "%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) ").concat(diameter / 2, "%, rgba(0, 0, 0, 1) 100%)");
     }
+    // Disable page reload on touchmove
+    document.body.addEventListener('touchmove', function (event) {
+        event.preventDefault();
+    }, { passive: false });
     window.addEventListener('mousemove', revealImage);
     window.addEventListener('touchmove', revealImage);
     document.body.appendChild(overlay);
