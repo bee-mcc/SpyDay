@@ -24,13 +24,32 @@ window.addEventListener('load', () => {
     overlay.style.top = `0px`;
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 1)';
+    overlay.style.backgroundImage =
+      'radial-gradient(circle closest-side, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)';
     overlay.style.zIndex = '1';
   }
 
   adjustImagePosition();
 
   window.addEventListener('resize', adjustImagePosition);
+
+  function revealImage(event: MouseEvent) {
+    const diameter = 40;
+    const x = event.clientX;
+    const y = event.clientY;
+
+    const canvasRect = overlay.getBoundingClientRect();
+    const gradientX =
+      ((x - canvasRect.left) / canvasRect.width) * 100;
+    const gradientY =
+      ((y - canvasRect.top) / canvasRect.height) * 100;
+
+    overlay.style.backgroundImage = `radial-gradient(circle at ${gradientX}% ${gradientY}%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) ${
+      diameter / 2
+    }%, rgba(0, 0, 0, 1) 100%)`;
+  }
+
+  window.addEventListener('mousemove', revealImage);
 
   document.body.appendChild(overlay);
 });
