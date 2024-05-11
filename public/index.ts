@@ -35,8 +35,15 @@ window.addEventListener('load', () => {
 
   function revealImage(event: MouseEvent | TouchEvent) {
     const diameter = 40;
-    const x = event.clientX;
-    const y = event.clientY;
+    let x, y;
+
+    if (event instanceof MouseEvent) {
+      x = event.clientX;
+      y = event.clientY;
+    } else if (event instanceof TouchEvent) {
+      x = event.touches[0].clientX;
+      y = event.touches[0].clientY;
+    }
 
     const canvasRect = overlay.getBoundingClientRect();
     const gradientX =
